@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Three.js Rubik's Cube</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <header id="hud">
+      <h1>Rubik's Cube</h1>
+      <p class="hint">Drag to orbit &middot; scroll to zoom &middot; use the buttons to turn faces</p>
+    </header>
+
+    <div id="controls">
+      <div class="group">
+        <span class="group-label">Faces (CW)</span>
+        <div class="buttons">
+          <button data-move="U">U</button>
+          <button data-move="D">D</button>
+          <button data-move="L">L</button>
+          <button data-move="R">R</button>
+          <button data-move="F">F</button>
+          <button data-move="B">B</button>
+        </div>
+      </div>
+      <div class="group">
+        <span class="group-label">Prime (CCW)</span>
+        <div class="buttons">
+          <button data-move="U'">U'</button>
+          <button data-move="D'">D'</button>
+          <button data-move="L'">L'</button>
+          <button data-move="R'">R'</button>
+          <button data-move="F'">F'</button>
+          <button data-move="B'">B'</button>
+        </div>
+      </div>
+      <div class="group">
+        <span class="group-label">Actions</span>
+        <div class="buttons">
+          <button id="scramble" class="accent">Scramble</button>
+          <button id="reset">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <canvas id="scene"></canvas>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="main.js"></script>
+</body>
+</html>
