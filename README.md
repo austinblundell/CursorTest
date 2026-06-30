@@ -12,7 +12,7 @@ python3 -m http.server 8080
 
 Then visit [http://localhost:8080](http://localhost:8080).
 
-Use the **Snake** / **Minesweeper** buttons at the top of any page to switch games without going back to the home screen.
+Use the **Snake** / **Minesweeper** / **Codex** buttons at the top of any page to switch games without going back to the home screen.
 
 ## Games
 
@@ -20,6 +20,7 @@ Use the **Snake** / **Minesweeper** buttons at the top of any page to switch gam
 |------|-------------|-------------|
 | Snake | [snake.html](snake.html) | Eat food, grow, and avoid walls and your tail |
 | Minesweeper | [minesweeper.html](minesweeper.html) | Reveal safe cells and flag all mines |
+| Codex | [codex.html](codex.html) | Stack springy 3D tetrominoes and clear full horizontal layers |
 
 ### Snake controls
 
@@ -58,3 +59,13 @@ Use the **Snake** / **Minesweeper** buttons at the top of any page to switch gam
 | Expert       | 30×16  | 99    |
 
 The first click is always safe — mines are placed after your opening move.
+
+### Codex controls
+
+- A / D — move active piece on X axis
+- W / S — move active piece on Z axis
+- Q / E — rotate active piece
+- Down Arrow — soft drop
+- Space — hard drop
+- P — pause / resume
+- Enter — restart game
