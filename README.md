@@ -12,7 +12,7 @@ python3 -m http.server 8080
 
 Then visit [http://localhost:8080](http://localhost:8080).
 
-Use the **Snake** / **Minesweeper** buttons at the top of any page to switch games without going back to the home screen.
+Use the **Snake** / **Minesweeper** / **GPT 5.5** buttons at the top of any page to switch games without going back to the home screen.
 
 ## Games
 
@@ -20,6 +20,7 @@ Use the **Snake** / **Minesweeper** buttons at the top of any page to switch gam
 |------|-------------|-------------|
 | Snake | [snake.html](snake.html) | Eat food, grow, and avoid walls and your tail |
 | Minesweeper | [minesweeper.html](minesweeper.html) | Reveal safe cells and flag all mines |
+| GPT 5.5 | [gpt55.html](gpt55.html) | Stack soft-body tetrominoes in a glowing 3D Tetris well |
 
 ### Snake controls
 
@@ -58,3 +59,22 @@ Use the **Snake** / **Minesweeper** buttons at the top of any page to switch gam
 | Expert       | 30×16  | 99    |
 
 The first click is always safe — mines are placed after your opening move.
+
+### GPT 5.5 controls
+
+**Desktop**
+
+- Arrow keys or A/D — move
+- Up, W, or X — rotate clockwise
+- Z — rotate counter-clockwise
+- Down or S — soft drop
+- Space — hard drop
+- P or Escape — pause / resume
+- Enter — start / restart
+
+**Mobile**
+
+- Tap the well — rotate
+- Swipe left/right — move
+- Swipe down — hard drop
+- Use the on-screen buttons for movement, spin, drop, slam, pause, and restart
