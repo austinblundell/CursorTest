@@ -20,10 +20,31 @@ Use the game buttons at the top of any page to switch games without going back t
 |------|-------------|-------------|
 | Snake | [snake.html](snake.html) | Eat food, grow, and avoid walls and your tail |
 | Minesweeper | [minesweeper.html](minesweeper.html) | Reveal safe cells and flag all mines |
+| Codex | [codex.html](codex.html) | Stack springy 3D tetrominoes and clear full horizontal layers |
 | Auto | [auto.html](auto.html) | 3D soft-body physics tetris — squishy pieces, line clears, rising levels |
 | GPT 5.5 | [gpt55.html](gpt55.html) | Stack soft-body tetrominoes in a glowing 3D Tetris well |
 | Composer 2.5 | [composer25.html](composer25.html) | 3D soft body physics Tetris with squishy jelly blocks |
+| Opus 4.8 | [opus48.html](opus48.html) | Soft body physics Tetris with wobbly 3D jelly pieces |
 | Sonnet 4.6 | [sonnet46.html](sonnet46.html) | 3D soft-body Tetris — spring-physics blocks squish, wobble and bounce |
+
+### Opus 4.8 controls
+
+Classic Tetris rules drive a logical grid while the falling piece is rendered as
+a wobbly mass-spring jelly that sags, bounces and squashes on impact.
+
+**Desktop**
+
+- ← / → or A / D — move left / right
+- ↑ / W / E — rotate clockwise · Q / Z — rotate counter-clockwise
+- ↓ / S — soft drop (hold)
+- Space — hard drop
+- P — pause / resume · Enter — start / restart
+- Mouse drag — orbit the 3D camera
+
+**Mobile**
+
+- On-screen buttons — move, rotate, soft drop, hard drop, pause, restart
+- Drag on the canvas — orbit the camera
 
 ### Snake controls
 
@@ -62,6 +83,16 @@ Use the game buttons at the top of any page to switch games without going back t
 | Expert       | 30×16  | 99    |
 
 The first click is always safe — mines are placed after your opening move.
+
+### Codex controls
+
+- A / D — move active piece on X axis
+- W / S — move active piece on Z axis
+- Q / E — rotate active piece
+- Down Arrow — soft drop
+- Space — hard drop
+- P — pause / resume
+- Enter — restart game
 
 ### Auto controls
 
