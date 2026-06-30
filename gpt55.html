@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>GPT 5.5 Soft Body Tetris</title>
+  <link rel="stylesheet" href="shared.css">
+  <link rel="stylesheet" href="gpt55.css">
+</head>
+<body>
+  <div class="gpt-shell">
+    <nav class="game-nav" aria-label="Switch game">
+      <a href="snake.html">Snake</a>
+      <a href="minesweeper.html">Minesweeper</a>
+      <a href="auto.html">Auto</a>
+      <a href="gpt55.html" class="active" aria-current="page">GPT 5.5</a>
+      <a href="composer25.html">Composer 2.5</a>
+      <a href="sonnet46.html">Sonnet 4.6</a>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">3D soft-body arcade lab</p>
+      <h1>GPT 5.5</h1>
+      <p class="subtitle">Squishy tetrominoes snap, wobble, and settle into a glowing 3D well.</p>
+    </header>
+
+    <main class="game-layout">
+      <section class="stage-card" aria-label="GPT 5.5 soft body Tetris game">
+        <div class="hud">
+          <div>
+            <span>Score</span>
+            <strong id="score">0</strong>
+          </div>
+          <div>
+            <span>Lines</span>
+            <strong id="lines">0</strong>
+          </div>
+          <div>
+            <span>Level</span>
+            <strong id="level">1</strong>
+          </div>
+          <div>
+            <span>Best</span>
+            <strong id="best">0</strong>
+          </div>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="game" width="560" height="720" aria-label="GPT 5.5 game board"></canvas>
+          <div id="overlay" class="overlay">
+            <p id="overlay-title">GPT 5.5</p>
+            <p id="overlay-message">Press Enter or tap Start to bend the blocks.</p>
+          </div>
+        </div>
+      </section>
+
+      <aside class="side-panel">
+        <section class="preview-card" aria-label="Next piece">
+          <h2>Next gel</h2>
+          <canvas id="next" width="180" height="150" aria-label="Next tetromino preview"></canvas>
+        </section>
+
+        <section class="control-card">
+          <h2>Controls</h2>
+          <ul class="control-list">
+            <li><strong>Move</strong><span>Arrow keys / A D</span></li>
+            <li><strong>Rotate</strong><span>Up / W / X, Z reverses</span></li>
+            <li><strong>Drop</strong><span>Down soft drop, Space hard drop</span></li>
+            <li><strong>Pause</strong><span>P or Escape</span></li>
+          </ul>
+        </section>
+
+        <section class="mobile-toolbar visible" aria-label="Touch controls">
+          <p class="mobile-hint">Tap controls or swipe the well to play.</p>
+          <div class="mobile-actions touch-grid">
+            <button type="button" data-action="left" aria-label="Move left">Left</button>
+            <button type="button" data-action="rotate" aria-label="Rotate">Spin</button>
+            <button type="button" data-action="right" aria-label="Move right">Right</button>
+            <button type="button" data-action="softDrop" aria-label="Soft drop">Drop</button>
+            <button type="button" data-action="hardDrop" aria-label="Hard drop">Slam</button>
+            <button type="button" data-action="pause" aria-label="Pause">Pause</button>
+          </div>
+          <button class="start-button" type="button" id="start-button">Start / Restart</button>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <script src="gpt55.js"></script>
+</body>
+</html>
