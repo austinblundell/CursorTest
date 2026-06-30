@@ -1,31 +1,45 @@
-# Snake Game
+# Classic Games
 
-A classic snake game built with HTML, CSS, and JavaScript.
+Browser-based classic games built with HTML, CSS, and JavaScript.
 
-## How to play
+## How to Play
 
-Open `index.html` in your browser, or serve the folder locally:
+Open `index.html` in a browser, or serve the folder locally:
 
 ```bash
 python3 -m http.server 8080
 ```
 
-Then visit http://localhost:8080
+Then visit [http://localhost:8080](http://localhost:8080).
 
-**Controls**
+## Games
+
+| Game | Entry point | Description |
+|------|-------------|-------------|
+| Snake | [snake.html](snake.html) | Eat food, grow, and avoid walls and your tail |
+| Minesweeper | [minesweeper.html](minesweeper.html) | Reveal safe cells and flag all mines |
+
+### Snake controls
+
 - Arrow keys or WASD — move
 - Space — pause / resume
 - Space (after game over) — play again
 
-Eat the red food to grow and score points. Avoid walls and your own tail!
+For mobile, use the self-contained [play.html](play.html) with touch/swipe controls.
 
-## Preview on mobile (private repo)
+### Minesweeper controls
 
-GitHub Pages requires a public repo on the free plan. To preview before merging:
+- Left-click — reveal a cell
+- Right-click — place or remove a flag
+- Double-click a revealed number — chord (reveal neighbors when enough flags are placed)
+- Long-press (touch) — flag a cell
 
-1. On your phone, open [play.html on the PR branch](https://github.com/austinblundell/CursorTest/blob/cursor/snake-game-ad9f/play.html)
-2. Tap the **⋯** menu → **View raw** (or **Download**)
-3. Go to [Netlify Drop](https://app.netlify.com/drop) in your mobile browser
-4. Upload `play.html` — you’ll get a public link instantly (no account needed)
+#### Difficulty levels
 
-`play.html` is a single self-contained file with touch/swipe controls for mobile.
+| Level        | Grid   | Mines |
+|--------------|--------|-------|
+| Beginner     | 9×9    | 10    |
+| Intermediate | 16×16  | 40    |
+| Expert       | 30×16  | 99    |
+
+The first click is always safe — mines are placed after your opening move.
