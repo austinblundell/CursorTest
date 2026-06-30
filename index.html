@@ -1,97 +1,1197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Classic Games</title>
-  <link rel="stylesheet" href="shared.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sonnet 4.6 — Soft Body Tetris</title>
   <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      min-height: 100vh;
+      background: #04040f;
       display: flex;
-      align-items: center;
       justify-content: center;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(ellipse at top, #2d3748 0%, #1a1f2e 60%);
-      color: #e2e8f0;
-      padding: 1.5rem;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      font-family: 'Courier New', Courier, monospace;
+      color: #fff;
     }
 
-    main {
-      width: 100%;
-      max-width: 420px;
+    #root {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    /* ---- Side Panels ---- */
+    .side-panel {
+      width: 130px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .game-title {
+      text-align: center;
+      font-size: 15px;
+      font-weight: bold;
+      letter-spacing: 4px;
+      color: #a0eeff;
+      text-shadow: 0 0 16px #00ddff, 0 0 30px #00aaff;
+      line-height: 1.4;
+      margin-bottom: 4px;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 10px 12px;
       text-align: center;
     }
 
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.35rem;
+    .stat-card .label {
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: #556;
+      margin-bottom: 5px;
+      text-transform: uppercase;
     }
 
-    p {
-      color: #94a3b8;
-      margin-bottom: 2rem;
+    .stat-card .value {
+      font-size: 22px;
+      font-weight: bold;
     }
 
-    .games {
+    #score-val  { color: #ffe040; text-shadow: 0 0 12px #ffcc00; }
+    #level-val  { color: #40ff90; text-shadow: 0 0 12px #00ff66; }
+    #lines-val  { color: #ff60ff; text-shadow: 0 0 12px #dd00dd; }
+    #combo-val  { color: #ff8040; text-shadow: 0 0 12px #ff5500; }
+
+    .preview-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 8px;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .preview-card .label {
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: #445;
+      margin-bottom: 6px;
+    }
+
+    .preview-card canvas {
+      display: block;
+      margin: 0 auto;
+      image-rendering: pixelated;
+    }
+
+    .hint-text {
+      font-size: 8px;
+      letter-spacing: 1px;
+      color: #334;
+      text-align: center;
+      line-height: 1.8;
+    }
+
+    /* ---- Canvas Wrapper ---- */
+    #canvas-wrap {
+      position: relative;
+      line-height: 0;
+    }
+
+    #canvas-wrap canvas {
+      display: block;
+      border-radius: 4px;
+    }
+
+    /* ---- Overlay ---- */
+    #overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: rgba(4, 4, 15, 0.88);
+      border-radius: 4px;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    #overlay h1 {
+      font-size: 28px;
+      letter-spacing: 8px;
+      color: #a0f0ff;
+      text-shadow: 0 0 24px #00cfff, 0 0 60px #006688;
+    }
+
+    #overlay .subtitle {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: #556;
+    }
+
+    #overlay .final-score {
+      font-size: 36px;
+      color: #ffe040;
+      text-shadow: 0 0 20px #ffcc00;
+      margin: 4px 0;
+    }
+
+    #overlay .stat-row {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: #668;
+    }
+
+    #start-btn {
+      background: transparent;
+      border: 1px solid #00cfff;
+      color: #00cfff;
+      font-family: inherit;
+      font-size: 12px;
+      letter-spacing: 4px;
+      padding: 10px 28px;
+      cursor: pointer;
+      border-radius: 4px;
+      text-shadow: 0 0 8px #00cfff;
+      box-shadow: 0 0 10px rgba(0,200,255,0.2);
+      transition: background 0.15s, box-shadow 0.15s;
+      margin-top: 8px;
+    }
+
+    #start-btn:hover {
+      background: rgba(0,200,255,0.12);
+      box-shadow: 0 0 22px rgba(0,200,255,0.4);
+    }
+
+    .controls-grid {
       display: grid;
-      gap: 1rem;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px 14px;
+      font-size: 9px;
+      letter-spacing: 1px;
+      color: #445;
+      margin-top: 4px;
     }
 
-    .game-link {
-      display: block;
-      padding: 1.25rem 1.5rem;
-      border-radius: 12px;
-      border: 1px solid #3a4256;
-      background: #252b3b;
-      color: inherit;
-      text-decoration: none;
-      transition: transform 0.15s, border-color 0.15s;
-    }
-
-    .game-link:hover {
-      transform: translateY(-2px);
-      border-color: #48bb78;
-    }
-
-    .game-link strong {
-      display: block;
-      font-size: 1.25rem;
-      margin-bottom: 0.35rem;
-    }
-
-    .game-link span {
-      color: #94a3b8;
-      font-size: 0.9rem;
-    }
+    .controls-grid span:nth-child(odd) { color: #556; }
   </style>
 </head>
 <body>
-  <main>
-    <nav class="game-nav" aria-label="Switch game">
-      <a href="snake.html">Snake</a>
-      <a href="minesweeper.html">Minesweeper</a>
-    </nav>
-    <h1>Classic Games</h1>
-    <p>Pick a game to play</p>
-    <nav class="games" aria-label="Game selection">
-      <a class="game-link" href="snake.html">
-        <strong>Snake</strong>
-        <span>Eat food, grow longer, avoid your tail</span>
-      </a>
-      <a class="game-link" href="minesweeper.html">
-        <strong>Minesweeper</strong>
-        <span>Clear the board without hitting a mine</span>
-      </a>
-    </nav>
-  </main>
+
+<div id="root">
+
+  <!-- Left Panel -->
+  <div class="side-panel">
+    <div class="game-title">SONNET<br>4.6</div>
+
+    <div class="stat-card">
+      <div class="label">Score</div>
+      <div class="value" id="score-val">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Level</div>
+      <div class="value" id="level-val">1</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Lines</div>
+      <div class="value" id="lines-val">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Combo</div>
+      <div class="value" id="combo-val">0</div>
+    </div>
+
+    <div class="preview-card">
+      <div class="label">Hold</div>
+      <canvas id="hold-cvs" width="90" height="72"></canvas>
+    </div>
+
+    <div class="hint-text">
+      ← → Move<br>
+      ↑ / X Rotate CW<br>
+      Z Rotate CCW<br>
+      ↓ Soft Drop<br>
+      Space Hard Drop<br>
+      C Hold<br>
+      P Pause
+    </div>
+  </div>
+
+  <!-- Game Canvas -->
+  <div id="canvas-wrap">
+    <canvas id="game-cvs"></canvas>
+    <div id="overlay">
+      <h1>SONNET 4.6</h1>
+      <div class="subtitle">SOFT BODY PHYSICS TETRIS</div>
+      <button id="start-btn" onclick="Game.startNew()">START GAME</button>
+      <div class="controls-grid">
+        <span>←→</span><span>Move</span>
+        <span>↑ / X</span><span>Rotate CW</span>
+        <span>Space</span><span>Hard Drop</span>
+        <span>C</span><span>Hold Piece</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel -->
+  <div class="side-panel">
+    <div class="preview-card" style="padding-bottom:12px">
+      <div class="label">Next</div>
+      <canvas id="next-cvs" width="90" height="72"></canvas>
+    </div>
+    <div class="preview-card">
+      <div class="label">Next 2</div>
+      <canvas id="next2-cvs" width="90" height="72"></canvas>
+    </div>
+    <div class="preview-card">
+      <div class="label">Next 3</div>
+      <canvas id="next3-cvs" width="90" height="72"></canvas>
+    </div>
+  </div>
+
+</div>
+
+<!-- Three.js -->
+<script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+
+<script>
+'use strict';
+
+// ─────────────────────────────────────────────
+//  CONSTANTS
+// ─────────────────────────────────────────────
+const COLS = 10, ROWS = 20;
+const BS   = 1.0;   // block world-unit size
+
+// Spring tuning
+const SCALE_K  = 18, SCALE_D  = 5.5;
+const WOBBLE_K = 14, WOBBLE_D = 4.0;
+const POS_K    = 22, POS_D    = 7.0;
+
+// ─────────────────────────────────────────────
+//  PIECE DEFINITIONS  (x,y coords; y↓ in piece-space)
+// ─────────────────────────────────────────────
+const COLORS = {
+  I: 0x00f8ff,
+  O: 0xffe622,
+  T: 0xcc22ff,
+  S: 0x22ff66,
+  Z: 0xff2244,
+  J: 0x2266ff,
+  L: 0xff8822,
+};
+
+// 4 rotations each, [ox,oy] pairs, oy grows downward in piece-space
+const SHAPES = {
+  I: [
+    [[0,0],[1,0],[2,0],[3,0]],
+    [[0,0],[0,1],[0,2],[0,3]],
+    [[0,0],[1,0],[2,0],[3,0]],
+    [[0,0],[0,1],[0,2],[0,3]],
+  ],
+  O: [
+    [[0,0],[1,0],[0,1],[1,1]],
+    [[0,0],[1,0],[0,1],[1,1]],
+    [[0,0],[1,0],[0,1],[1,1]],
+    [[0,0],[1,0],[0,1],[1,1]],
+  ],
+  T: [
+    [[1,0],[0,1],[1,1],[2,1]],
+    [[0,0],[0,1],[1,1],[0,2]],
+    [[0,0],[1,0],[2,0],[1,1]],
+    [[1,0],[0,1],[1,1],[1,2]],
+  ],
+  S: [
+    [[1,0],[2,0],[0,1],[1,1]],
+    [[0,0],[0,1],[1,1],[1,2]],
+    [[1,0],[2,0],[0,1],[1,1]],
+    [[0,0],[0,1],[1,1],[1,2]],
+  ],
+  Z: [
+    [[0,0],[1,0],[1,1],[2,1]],
+    [[1,0],[0,1],[1,1],[0,2]],
+    [[0,0],[1,0],[1,1],[2,1]],
+    [[1,0],[0,1],[1,1],[0,2]],
+  ],
+  J: [
+    [[0,0],[0,1],[1,1],[2,1]],
+    [[0,0],[1,0],[0,1],[0,2]],
+    [[0,0],[1,0],[2,0],[2,1]],
+    [[1,0],[1,1],[0,2],[1,2]],
+  ],
+  L: [
+    [[2,0],[0,1],[1,1],[2,1]],
+    [[0,0],[0,1],[0,2],[1,2]],
+    [[0,0],[1,0],[2,0],[0,1]],
+    [[0,0],[1,0],[1,1],[1,2]],
+  ],
+};
+
+const PIECE_TYPES = ['I','O','T','S','Z','J','L'];
+
+// ─────────────────────────────────────────────
+//  SOFT BLOCK
+// ─────────────────────────────────────────────
+class SoftBlock {
+  constructor(scene, hexColor) {
+    this._scene = scene;
+    this.color  = hexColor;
+
+    // Core mesh
+    const s   = BS * 0.90;
+    const geo = new THREE.BoxGeometry(s, s, s);
+    const col = new THREE.Color(hexColor);
+    const mat = new THREE.MeshPhongMaterial({
+      color:    col,
+      emissive: col.clone().multiplyScalar(0.25),
+      shininess: 130,
+      specular: new THREE.Color(0.6, 0.6, 0.6),
+    });
+    this.mesh = new THREE.Mesh(geo, mat);
+    this.mesh.castShadow    = true;
+    this.mesh.receiveShadow = true;
+
+    // Glow halo (BackSide trick)
+    const glowGeo = new THREE.BoxGeometry(s * 1.30, s * 1.30, s * 1.30);
+    const glowMat = new THREE.MeshBasicMaterial({
+      color: col,
+      side: THREE.BackSide,
+      transparent: true,
+      opacity: 0.10,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    this.glow = new THREE.Mesh(glowGeo, glowMat);
+    this.mesh.add(this.glow);
+
+    scene.add(this.mesh);
+
+    // Grid position (logical)
+    this.gx = 0; this.gy = 0;
+
+    // Visual position (spring-driven)
+    this.vx = 0;  this.vy = 0;
+    this.pvx = 0; this.pvy = 0;
+
+    // Scale spring (soft-body squish)
+    this.sx = 1; this.sy = 1; this.sz = 1;
+    this.svx = 0; this.svy = 0; this.svz = 0;
+
+    // Rotation wobble spring
+    this.wx = 0; this.wz = 0;
+    this.wvx = 0; this.wvz = 0;
+
+    this.alive = true;
+  }
+
+  setGrid(gx, gy, instant = false) {
+    this.gx = gx; this.gy = gy;
+    if (instant) { this.vx = gx; this.vy = gy; this.pvx = 0; this.pvy = 0; }
+  }
+
+  impactSquish(strength) {
+    strength = Math.min(strength, 0.9);
+    this.svy -= strength * 3.0;
+    this.svx += strength * 1.4;
+    this.svz += strength * 1.4;
+    this.wvx += (Math.random() - 0.5) * strength * 5;
+    this.wvz += (Math.random() - 0.5) * strength * 5;
+  }
+
+  rotateWobble() {
+    this.wvx += (Math.random() - 0.5) * 0.7;
+    this.wvz += (Math.random() - 0.5) * 0.7;
+    this.svx += (Math.random() - 0.5) * 0.2;
+    this.svz += (Math.random() - 0.5) * 0.2;
+  }
+
+  moveWobble(dir) {
+    this.wvz += dir * 0.25;
+  }
+
+  dropWobble() {
+    this.svy -= 0.4;
+    this.svx += 0.2;
+    this.svz += 0.2;
+  }
+
+  update(dt) {
+    dt = Math.min(dt, 0.05);
+
+    // Position spring
+    const fpx = -POS_K * (this.vx - this.gx) - POS_D * this.pvx;
+    const fpy = -POS_K * (this.vy - this.gy) - POS_D * this.pvy;
+    this.pvx += fpx * dt; this.vx += this.pvx * dt;
+    this.pvy += fpy * dt; this.vy += this.pvy * dt;
+
+    // Scale springs (soft body deformation)
+    const fsx = -SCALE_K * (this.sx - 1) - SCALE_D * this.svx;
+    const fsy = -SCALE_K * (this.sy - 1) - SCALE_D * this.svy;
+    const fsz = -SCALE_K * (this.sz - 1) - SCALE_D * this.svz;
+    this.svx += fsx * dt; this.sx += this.svx * dt;
+    this.svy += fsy * dt; this.sy += this.svy * dt;
+    this.svz += fsz * dt; this.sz += this.svz * dt;
+
+    this.sx = Math.max(0.04, this.sx);
+    this.sy = Math.max(0.04, this.sy);
+    this.sz = Math.max(0.04, this.sz);
+
+    // Wobble springs
+    const fwx = -WOBBLE_K * this.wx - WOBBLE_D * this.wvx;
+    const fwz = -WOBBLE_K * this.wz - WOBBLE_D * this.wvz;
+    this.wvx += fwx * dt; this.wx += this.wvx * dt;
+    this.wvz += fwz * dt; this.wz += this.wvz * dt;
+
+    // Apply to mesh
+    this.mesh.position.set(this.vx, this.vy, 0);
+    this.mesh.scale.set(this.sx, this.sy, this.sz);
+    this.mesh.rotation.x = this.wx;
+    this.mesh.rotation.z = this.wz;
+  }
+
+  dispose() {
+    this._scene.remove(this.mesh);
+    this.mesh.geometry.dispose();
+    this.mesh.material.dispose();
+    this.glow.geometry.dispose();
+    this.glow.material.dispose();
+    this.alive = false;
+  }
+}
+
+// ─────────────────────────────────────────────
+//  PARTICLE
+// ─────────────────────────────────────────────
+class Particle {
+  constructor(scene, x, y, hexColor) {
+    const geo = new THREE.SphereGeometry(0.08 + Math.random() * 0.08, 4, 4);
+    const mat = new THREE.MeshBasicMaterial({
+      color: new THREE.Color(hexColor),
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    this.mesh = new THREE.Mesh(geo, mat);
+    scene.add(this.mesh);
+    this._scene = scene;
+
+    const ang = Math.random() * Math.PI * 2;
+    const spd = 2.5 + Math.random() * 6;
+    this.vx = Math.cos(ang) * spd;
+    this.vy = Math.sin(ang) * spd + 1.5;
+    this.vz = (Math.random() - 0.5) * 5;
+    this.mesh.position.set(x, y, 0);
+    this.life = 1.0;
+    this.decay = 1.4 + Math.random() * 1.4;
+  }
+
+  update(dt) {
+    this.vy -= 10 * dt;
+    this.mesh.position.x += this.vx * dt;
+    this.mesh.position.y += this.vy * dt;
+    this.mesh.position.z += this.vz * dt;
+    this.life -= this.decay * dt;
+    const s = Math.max(0, this.life);
+    this.mesh.scale.setScalar(s);
+    this.mesh.material.opacity = s;
+    return this.life > 0;
+  }
+
+  dispose() {
+    this._scene.remove(this.mesh);
+    this.mesh.geometry.dispose();
+    this.mesh.material.dispose();
+  }
+}
+
+// ─────────────────────────────────────────────
+//  FLASH LINE OVERLAY (for line-clear highlight)
+// ─────────────────────────────────────────────
+class FlashRow {
+  constructor(scene, row) {
+    const geo = new THREE.PlaneGeometry(COLS, 1);
+    const mat = new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0.55,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    this.mesh = new THREE.Mesh(geo, mat);
+    this.mesh.position.set((COLS - 1) / 2, row, 0.05);
+    scene.add(this.mesh);
+    this._scene = scene;
+    this.life = 1.0;
+  }
+
+  update(dt) {
+    this.life -= dt * 3.5;
+    const s = Math.max(0, this.life);
+    this.mesh.material.opacity = s * 0.55;
+    this.mesh.scale.x = 1 + (1 - s) * 0.15;
+    return this.life > 0;
+  }
+
+  dispose() {
+    this._scene.remove(this.mesh);
+    this.mesh.geometry.dispose();
+    this.mesh.material.dispose();
+  }
+}
+
+// ─────────────────────────────────────────────
+//  GHOST BLOCK HELPER
+// ─────────────────────────────────────────────
+function makeGhostMesh(scene, x, y, hexColor) {
+  const s   = BS * 0.88;
+  const geo = new THREE.BoxGeometry(s, s, s);
+  const mat = new THREE.MeshBasicMaterial({
+    color: new THREE.Color(hexColor),
+    transparent: true,
+    opacity: 0.13,
+    wireframe: true,
+  });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.set(x, y, 0);
+  scene.add(mesh);
+  return { mesh, dispose() { scene.remove(mesh); geo.dispose(); mat.dispose(); } };
+}
+
+// ─────────────────────────────────────────────
+//  PREVIEW CANVAS RENDERER
+// ─────────────────────────────────────────────
+function drawPreview(cvs, type, dim = 0) {
+  const ctx = cvs.getContext('2d');
+  ctx.clearRect(0, 0, cvs.width, cvs.height);
+  if (!type) return;
+
+  const shape = SHAPES[type][0];
+  const hexColor = '#' + COLORS[type].toString(16).padStart(6, '0');
+
+  const minX = Math.min(...shape.map(([x]) => x));
+  const maxX = Math.max(...shape.map(([x]) => x));
+  const minY = Math.min(...shape.map(([,y]) => y));
+  const maxY = Math.max(...shape.map(([,y]) => y));
+  const pw = maxX - minX + 1;
+  const ph = maxY - minY + 1;
+
+  const cell = Math.min((cvs.width - 12) / pw, (cvs.height - 12) / ph);
+  const ox   = (cvs.width  - pw * cell) / 2;
+  const oy   = (cvs.height - ph * cell) / 2;
+
+  shape.forEach(([sx, sy]) => {
+    const px = ox + (sx - minX) * cell;
+    const py = oy + (sy - minY) * cell;
+    ctx.shadowColor = dim ? '#222' : hexColor;
+    ctx.shadowBlur  = dim ? 0 : 12;
+    ctx.fillStyle   = dim ? '#333' : hexColor;
+    ctx.fillRect(px + 2, py + 2, cell - 4, cell - 4);
+    // highlight
+    if (!dim) {
+      ctx.fillStyle = 'rgba(255,255,255,0.25)';
+      ctx.fillRect(px + 2, py + 2, cell - 4, 3);
+      ctx.fillRect(px + 2, py + 2, 3, cell - 4);
+    }
+  });
+}
+
+// ─────────────────────────────────────────────
+//  MAIN GAME
+// ─────────────────────────────────────────────
+const Game = (() => {
+
+  // --- Three.js objects ---
+  let renderer, scene, camera;
+
+  // --- State ---
+  let board;          // board[y][x] = SoftBlock | null
+  let activePiece;    // { type, rot, x, y }
+  let activeBlocks;   // SoftBlock[]
+  let ghostItems;     // { mesh, dispose }[]
+  let placedBlocks;   // SoftBlock[]
+  let particles;      // Particle[]
+  let flashRows;      // FlashRow[]
+  let bag;            // string[]
+  let queue;          // next 3 piece types
+  let holdType;       // string | null
+  let canHold;
+  let state;          // 'idle' | 'playing' | 'clearing' | 'paused' | 'gameover'
+  let clearTimer, clearRowsList;
+
+  let score, level, lines, combo;
+  let fallTimer, fallInterval;
+  let lastTime;
+
+  // --- Three.js Setup ---
+  function initThree() {
+    const cvs = document.getElementById('game-cvs');
+
+    const vh = Math.min(window.innerHeight * 0.94, 760);
+    const vw = vh * (COLS / ROWS);
+    cvs.width  = vw;
+    cvs.height = vh;
+
+    renderer = new THREE.WebGLRenderer({ canvas: cvs, antialias: true });
+    renderer.setSize(vw, vh);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
+    renderer.setClearColor(0x04040f, 1);
+
+    scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x04040f, 0.045);
+
+    // Camera slightly above-center looking down a touch
+    const aspect = vw / vh;
+    const fovY   = 2 * Math.atan(ROWS / 2 / 13.5) * (180 / Math.PI);
+    camera = new THREE.PerspectiveCamera(fovY, aspect, 0.1, 120);
+    const cx = (COLS - 1) / 2;
+    const cy = (ROWS - 1) / 2;
+    camera.position.set(cx, cy + 0.8, 13.5);
+    camera.lookAt(cx, cy - 0.2, 0);
+
+    buildSceneStatics();
+  }
+
+  function buildSceneStatics() {
+    // Board backdrop
+    const bgGeo = new THREE.PlaneGeometry(COLS, ROWS);
+    const bgMat = new THREE.MeshBasicMaterial({ color: 0x080818 });
+    const bg    = new THREE.Mesh(bgGeo, bgMat);
+    bg.position.set((COLS - 1) / 2, (ROWS - 1) / 2, -0.52);
+    scene.add(bg);
+
+    // Grid lines
+    const lineMat = new THREE.LineBasicMaterial({
+      color: 0x18264a,
+      transparent: true,
+      opacity: 0.6,
+    });
+    for (let x = 0; x <= COLS; x++) {
+      const g = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(x - 0.5, -0.5,       -0.50),
+        new THREE.Vector3(x - 0.5, ROWS - 0.5, -0.50),
+      ]);
+      scene.add(new THREE.Line(g, lineMat));
+    }
+    for (let y = 0; y <= ROWS; y++) {
+      const g = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(-0.5,       y - 0.5, -0.50),
+        new THREE.Vector3(COLS - 0.5, y - 0.5, -0.50),
+      ]);
+      scene.add(new THREE.Line(g, lineMat));
+    }
+
+    // Border frame
+    const frameMat = new THREE.LineBasicMaterial({ color: 0x2244aa, transparent: true, opacity: 0.7 });
+    const pts = [
+      new THREE.Vector3(-0.5,       -0.5,       0),
+      new THREE.Vector3(COLS - 0.5, -0.5,       0),
+      new THREE.Vector3(COLS - 0.5, ROWS - 0.5, 0),
+      new THREE.Vector3(-0.5,       ROWS - 0.5, 0),
+      new THREE.Vector3(-0.5,       -0.5,       0),
+    ];
+    scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), frameMat));
+
+    // Floor plane (for shadows)
+    const floorGeo = new THREE.PlaneGeometry(COLS + 4, 6);
+    const floorMat = new THREE.MeshPhongMaterial({ color: 0x060618, transparent: true, opacity: 0.6 });
+    const floor    = new THREE.Mesh(floorGeo, floorMat);
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.set((COLS - 1) / 2, -0.5, -0.3);
+    floor.receiveShadow = true;
+    scene.add(floor);
+
+    // Lights
+    scene.add(new THREE.AmbientLight(0x1a2840, 1.0));
+
+    const sun = new THREE.DirectionalLight(0xffffff, 1.1);
+    sun.position.set(4, 18, 10);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(1024, 1024);
+    sun.shadow.camera.left   = -8;
+    sun.shadow.camera.right  =  18;
+    sun.shadow.camera.top    =  25;
+    sun.shadow.camera.bottom = -4;
+    scene.add(sun);
+
+    const pl1 = new THREE.PointLight(0x0033ff, 3, 22);
+    pl1.position.set(-2, 18, 6);
+    scene.add(pl1);
+
+    const pl2 = new THREE.PointLight(0xff3300, 3, 22);
+    pl2.position.set(COLS + 2, 4, 6);
+    scene.add(pl2);
+
+    const pl3 = new THREE.PointLight(0x00ff88, 2, 18);
+    pl3.position.set(COLS / 2, -2, 7);
+    scene.add(pl3);
+
+    // Slow colour cycling on accent lights
+    scene._pl1 = pl1; scene._pl2 = pl2;
+  }
+
+  // --- Bag system ---
+  function popBag() {
+    if (bag.length === 0) {
+      bag = [...PIECE_TYPES];
+      for (let i = bag.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [bag[i], bag[j]] = [bag[j], bag[i]];
+      }
+    }
+    return bag.pop();
+  }
+
+  function refillQueue() {
+    while (queue.length < 3) queue.push(popBag());
+  }
+
+  // --- Helpers ---
+  function getShape(type, rot) {
+    return SHAPES[type][((rot % 4) + 4) % 4];
+  }
+
+  function isValid(type, rot, px, py) {
+    for (const [ox, oy] of getShape(type, rot)) {
+      const bx = px + ox, by = py - oy;
+      if (bx < 0 || bx >= COLS)  return false;
+      if (by < 0)                 return false;
+      if (by < ROWS && board[by][bx] !== null) return false;
+    }
+    return true;
+  }
+
+  function ghostY() {
+    let gy = activePiece.y;
+    while (isValid(activePiece.type, activePiece.rot, activePiece.x, gy - 1)) gy--;
+    return gy;
+  }
+
+  // --- Piece lifecycle ---
+  function spawnPiece(type) {
+    refillQueue();
+    type = type || queue.shift();
+    refillQueue();
+
+    const shape = getShape(type, 0);
+    const minX  = Math.min(...shape.map(([x]) => x));
+    const maxX  = Math.max(...shape.map(([x]) => x));
+    const spawnX = Math.floor((COLS - (maxX - minX + 1)) / 2) - minX;
+    const spawnY = ROWS - 1;
+
+    // Collides on spawn → game over
+    if (!isValid(type, 0, spawnX, spawnY)) {
+      triggerGameOver();
+      return;
+    }
+
+    activePiece = { type, rot: 0, x: spawnX, y: spawnY };
+    clearActiveBlocks();
+
+    const color = COLORS[type];
+    for (const [ox, oy] of shape) {
+      const b = new SoftBlock(scene, color);
+      b.setGrid(spawnX + ox, spawnY - oy, true);
+      activeBlocks.push(b);
+    }
+
+    canHold = true;
+    rebuildGhost();
+    updatePreviews();
+  }
+
+  function clearActiveBlocks() {
+    activeBlocks.forEach(b => b.dispose());
+    activeBlocks = [];
+  }
+
+  function clearGhost() {
+    ghostItems.forEach(g => g.dispose());
+    ghostItems = [];
+  }
+
+  function rebuildGhost() {
+    clearGhost();
+    if (!activePiece) return;
+    const gy  = ghostY();
+    if (gy === activePiece.y) return;
+    const col = COLORS[activePiece.type];
+    for (const [ox, oy] of getShape(activePiece.type, activePiece.rot)) {
+      ghostItems.push(makeGhostMesh(scene, activePiece.x + ox, gy - oy, col));
+    }
+  }
+
+  function syncActiveBlockPositions(instant = false) {
+    if (!activePiece) return;
+    const shape = getShape(activePiece.type, activePiece.rot);
+    shape.forEach(([ox, oy], i) => {
+      if (activeBlocks[i]) activeBlocks[i].setGrid(activePiece.x + ox, activePiece.y - oy, instant);
+    });
+  }
+
+  // --- Move / Rotate ---
+  function tryMove(dx, dy) {
+    if (!activePiece || state !== 'playing') return false;
+    if (!isValid(activePiece.type, activePiece.rot, activePiece.x + dx, activePiece.y + dy)) return false;
+    activePiece.x += dx;
+    activePiece.y += dy;
+    syncActiveBlockPositions();
+    if (dx !== 0) activeBlocks.forEach(b => b.moveWobble(dx * 0.8));
+    rebuildGhost();
+    return true;
+  }
+
+  function tryRotate(dir) {
+    if (!activePiece || state !== 'playing') return;
+    const newRot = ((activePiece.rot + dir) % 4 + 4) % 4;
+    const kicks  = [[0,0],[-1,0],[1,0],[0,1],[0,-1],[-2,0],[2,0]];
+    for (const [kx, ky] of kicks) {
+      if (isValid(activePiece.type, newRot, activePiece.x + kx, activePiece.y + ky)) {
+        activePiece.rot  = newRot;
+        activePiece.x   += kx;
+        activePiece.y   += ky;
+        syncActiveBlockPositions();
+        activeBlocks.forEach(b => b.rotateWobble());
+        rebuildGhost();
+        return;
+      }
+    }
+  }
+
+  function hardDrop() {
+    if (!activePiece || state !== 'playing') return;
+    let dropped = 0;
+    while (tryMove(0, -1)) dropped++;
+    score += dropped * 2;
+    updateUI();
+    activeBlocks.forEach(b => {
+      b.dropWobble();
+      b.impactSquish(0.55 + Math.random() * 0.15);
+    });
+    setTimeout(lockPiece, 55);
+  }
+
+  function holdPiece() {
+    if (!activePiece || !canHold || state !== 'playing') return;
+    const cur = activePiece.type;
+    clearActiveBlocks();
+    clearGhost();
+    activePiece = null;
+    const prev = holdType;
+    holdType    = cur;
+    canHold     = false;
+    drawPreview(document.getElementById('hold-cvs'), holdType);
+    if (prev) spawnPiece(prev);
+    else       spawnPiece();
+  }
+
+  function lockPiece() {
+    if (!activePiece) return;
+    const { type, rot, x, y } = activePiece;
+    const shape = getShape(type, rot);
+
+    shape.forEach(([ox, oy], i) => {
+      const bx = x + ox, by = y - oy;
+      if (by < 0 || by >= ROWS) return;
+      const blk = activeBlocks[i];
+      if (!blk) return;
+      blk.impactSquish(0.3 + Math.random() * 0.2);
+      board[by][bx] = blk;
+      placedBlocks.push(blk);
+    });
+
+    activePiece  = null;
+    activeBlocks = [];
+    clearGhost();
+
+    // Detect full rows
+    const full = [];
+    for (let r = 0; r < ROWS; r++) {
+      if (board[r].every(c => c !== null)) full.push(r);
+    }
+
+    if (full.length > 0) {
+      beginLineClear(full);
+    } else {
+      combo = 0;
+      spawnPiece();
+    }
+  }
+
+  // --- Line Clear ---
+  function beginLineClear(rows) {
+    state = 'clearing';
+    clearRowsList = rows;
+    clearTimer    = 0;
+
+    // Flash + squish blocks in cleared rows
+    rows.forEach(r => {
+      flashRows.push(new FlashRow(scene, r));
+      for (let c = 0; c < COLS; c++) {
+        const blk = board[r][c];
+        if (blk) blk.impactSquish(0.65 + Math.random() * 0.2);
+      }
+    });
+  }
+
+  function finishLineClear() {
+    const rows = clearRowsList;
+
+    // Explode particles + remove blocks
+    rows.forEach(r => {
+      for (let c = 0; c < COLS; c++) {
+        const blk = board[r][c];
+        if (!blk) continue;
+        for (let p = 0; p < 6; p++) particles.push(new Particle(scene, c, r, blk.color));
+        blk.dispose();
+        placedBlocks = placedBlocks.filter(b => b !== blk);
+      }
+    });
+
+    // Remove rows from board (highest index first)
+    rows.sort((a, b) => b - a);
+    rows.forEach(r => {
+      board.splice(r, 1);
+      board.push(Array(COLS).fill(null));
+    });
+
+    // Update visual positions for all surviving blocks
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        const blk = board[r][c];
+        if (blk) {
+          blk.setGrid(c, r);
+          blk.impactSquish(0.12 + Math.random() * 0.08);
+        }
+      }
+    }
+
+    // Score (Tetris guideline)
+    const n  = rows.length;
+    const pt = [0, 100, 300, 500, 800][n] * level;
+    combo++;
+    const comboBonus = combo > 1 ? (combo - 1) * 50 * level : 0;
+    score += pt + comboBonus;
+    lines += n;
+    level  = Math.floor(lines / 10) + 1;
+    fallInterval = Math.max(0.06, 0.75 * Math.pow(0.82, level - 1));
+    updateUI();
+
+    state         = 'playing';
+    clearRowsList = [];
+    spawnPiece();
+  }
+
+  // --- Game Over ---
+  function triggerGameOver() {
+    state = 'gameover';
+    clearGhost();
+    placedBlocks.forEach(b => {
+      b.impactSquish(0.7 + Math.random() * 0.3);
+      b.wvx += (Math.random() - 0.5) * 3;
+      b.wvz += (Math.random() - 0.5) * 3;
+    });
+
+    setTimeout(() => {
+      const overlay = document.getElementById('overlay');
+      overlay.innerHTML = `
+        <h1>GAME OVER</h1>
+        <div class="subtitle">FINAL SCORE</div>
+        <div class="final-score">${score.toLocaleString()}</div>
+        <div class="stat-row">LINES ${lines} &nbsp;·&nbsp; LEVEL ${level}</div>
+        <button id="start-btn" onclick="Game.startNew()">PLAY AGAIN</button>
+      `;
+      overlay.style.display = 'flex';
+    }, 1200);
+  }
+
+  // --- Input ---
+  function initInput() {
+    const pressed = {};
+    let repeatL, repeatR, repeatD;
+
+    const clearRepeats = () => {
+      clearInterval(repeatL); clearInterval(repeatR); clearInterval(repeatD);
+      repeatL = repeatR = repeatD = null;
+    };
+
+    document.addEventListener('keydown', e => {
+      if (pressed[e.code]) return;
+      pressed[e.code] = true;
+
+      if (state !== 'playing') {
+        if (e.code === 'KeyP' && state === 'paused') { state = 'playing'; hideOverlay(); }
+        return;
+      }
+
+      switch (e.code) {
+        case 'ArrowLeft':
+          tryMove(-1, 0);
+          repeatL = setInterval(() => tryMove(-1, 0), 95);
+          break;
+        case 'ArrowRight':
+          tryMove(1, 0);
+          repeatR = setInterval(() => tryMove(1, 0), 95);
+          break;
+        case 'ArrowDown':
+          tryMove(0, -1);
+          repeatD = setInterval(() => { if (!tryMove(0, -1)) lockPiece(); }, 75);
+          break;
+        case 'ArrowUp':
+        case 'KeyX':
+          tryRotate(1);
+          break;
+        case 'KeyZ':
+          tryRotate(-1);
+          break;
+        case 'Space':
+          e.preventDefault();
+          hardDrop();
+          break;
+        case 'KeyC':
+          holdPiece();
+          break;
+        case 'KeyP':
+          state = 'paused';
+          showOverlay('<h1>PAUSED</h1><button id="start-btn" onclick="Game.resume()">RESUME</button>');
+          break;
+      }
+    });
+
+    document.addEventListener('keyup', e => {
+      pressed[e.code] = false;
+      if (e.code === 'ArrowLeft')  { clearInterval(repeatL); repeatL = null; }
+      if (e.code === 'ArrowRight') { clearInterval(repeatR); repeatR = null; }
+      if (e.code === 'ArrowDown')  { clearInterval(repeatD); repeatD = null; }
+    });
+  }
+
+  function showOverlay(html) {
+    const el = document.getElementById('overlay');
+    el.innerHTML = html;
+    el.style.display = 'flex';
+  }
+
+  function hideOverlay() {
+    document.getElementById('overlay').style.display = 'none';
+  }
+
+  // --- UI ---
+  function updateUI() {
+    document.getElementById('score-val').textContent = score.toLocaleString();
+    document.getElementById('level-val').textContent = level;
+    document.getElementById('lines-val').textContent = lines;
+    document.getElementById('combo-val').textContent = combo > 1 ? `x${combo}` : combo;
+  }
+
+  function updatePreviews() {
+    drawPreview(document.getElementById('next-cvs'),  queue[0] || null);
+    drawPreview(document.getElementById('next2-cvs'), queue[1] || null);
+    drawPreview(document.getElementById('next3-cvs'), queue[2] || null);
+  }
+
+  // --- Main Loop ---
+  function loop(time) {
+    requestAnimationFrame(loop);
+
+    const dt = Math.min((time - lastTime) / 1000, 0.1);
+    lastTime = time;
+
+    // Animate accent lights (colour cycle)
+    if (scene._pl1) {
+      const t = time * 0.0008;
+      scene._pl1.color.setHSL((t * 0.2) % 1, 1, 0.5);
+      scene._pl2.color.setHSL((t * 0.2 + 0.5) % 1, 1, 0.5);
+    }
+
+    if (state === 'playing') {
+      fallTimer += dt;
+      if (fallTimer >= fallInterval) {
+        fallTimer = 0;
+        if (!tryMove(0, -1)) lockPiece();
+      }
+    }
+
+    if (state === 'clearing') {
+      clearTimer += dt;
+      if (clearTimer > 0.32) finishLineClear();
+    }
+
+    // Physics updates
+    activeBlocks.forEach(b => b.update(dt));
+    placedBlocks.forEach(b => b.update(dt));
+
+    // Particles
+    particles = particles.filter(p => { const a = p.update(dt); if (!a) p.dispose(); return a; });
+
+    // Flash rows
+    flashRows = flashRows.filter(f => { const a = f.update(dt); if (!a) f.dispose(); return a; });
+
+    renderer.render(scene, camera);
+  }
+
+  // --- Public API ---
+  function init() {
+    initThree();
+    initInput();
+    requestAnimationFrame(loop);
+  }
+
+  function startNew() {
+    // Clear everything
+    if (activeBlocks) activeBlocks.forEach(b => b.dispose());
+    if (placedBlocks) placedBlocks.forEach(b => b.dispose());
+    if (ghostItems)   ghostItems.forEach(g => g.dispose());
+    if (particles)    particles.forEach(p => p.dispose());
+    if (flashRows)    flashRows.forEach(f => f.dispose());
+
+    board        = Array.from({ length: ROWS }, () => Array(COLS).fill(null));
+    activeBlocks = [];
+    ghostItems   = [];
+    placedBlocks = [];
+    particles    = [];
+    flashRows    = [];
+    bag          = [];
+    queue        = [];
+    holdType     = null;
+    canHold      = true;
+    state        = 'playing';
+    score        = 0;
+    level        = 1;
+    lines        = 0;
+    combo        = 0;
+    fallTimer    = 0;
+    fallInterval = 0.75;
+    clearTimer   = 0;
+    clearRowsList = [];
+    lastTime     = performance.now();
+
+    drawPreview(document.getElementById('hold-cvs'), null);
+    updateUI();
+    hideOverlay();
+    refillQueue();
+    spawnPiece();
+  }
+
+  function resume() {
+    if (state === 'paused') { state = 'playing'; hideOverlay(); }
+  }
+
+  return { init, startNew, resume };
+})();
+
+// ─────────────────────────────────────────────
+//  BOOT
+// ─────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => Game.init());
+</script>
 </body>
 </html>
