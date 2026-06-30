@@ -91,6 +91,7 @@ let best = Number(localStorage.getItem(STORAGE_KEY) || 0);
 let dropTimer;
 let lockTimer;
 let lastTime;
+let animationFrameId = null;
 let running = false;
 let paused = false;
 let gameOver = false;
@@ -175,6 +176,10 @@ function spawnPiece() {
 }
 
 function startGame() {
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+    animationFrameId = null;
+  }
   board = createBoard();
   particles = [];
   bag = randomBag();
@@ -191,7 +196,7 @@ function startGame() {
   spawnPiece();
   updateHud();
   hideOverlay();
-  requestAnimationFrame(loop);
+  animationFrameId = requestAnimationFrame(loop);
 }
 
 function updateHud() {
@@ -234,7 +239,7 @@ function togglePause() {
   } else {
     hideOverlay();
     lastTime = performance.now();
-    requestAnimationFrame(loop);
+    animationFrameId = requestAnimationFrame(loop);
   }
 }
 
@@ -294,11 +299,12 @@ function stretchActive(scaleX, scaleY, spin) {
 
 function lockPiece(slammed = false) {
   const cells = cellsFor(active);
+  if (cells.some((cell) => cell.y < 0)) {
+    endGame();
+    return;
+  }
+
   cells.forEach((cell) => {
-    if (cell.y < 0) {
-      endGame();
-      return;
-    }
     const body = cell.body;
     body.vy += slammed ? 7 : 2.5;
     body.sxv += slammed ? 0.22 : 0.08;
@@ -452,13 +458,16 @@ function updateParticles(delta) {
 }
 
 function loop(now) {
-  if (!running || paused) return;
+  if (!running || paused) {
+    animationFrameId = null;
+    return;
+  }
   const delta = Math.min(48, now - lastTime);
   lastTime = now;
   step(delta);
   updateBodies(delta);
   draw();
-  requestAnimationFrame(loop);
+  animationFrameId = requestAnimationFrame(loop);
 }
 
 function gridToScreen(gridX, gridY) {
