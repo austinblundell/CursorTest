@@ -24,8 +24,34 @@ Use the game buttons at the top of any page to switch games without going back t
 | Auto | [auto.html](auto.html) | 3D soft-body physics tetris — squishy pieces, line clears, rising levels |
 | GPT 5.5 | [gpt55.html](gpt55.html) | Stack soft-body tetrominoes in a glowing 3D Tetris well |
 | Composer 2.5 | [composer25.html](composer25.html) | 3D soft body physics Tetris with squishy jelly blocks |
+| Opus 4.7 | [opus47.html](opus47.html) | 3D Tetris where every piece is a wobbling soft-body jelly |
 | Opus 4.8 | [opus48.html](opus48.html) | Soft body physics Tetris with wobbly 3D jelly pieces |
 | Sonnet 4.6 | [sonnet46.html](sonnet46.html) | 3D soft-body Tetris — spring-physics blocks squish, wobble and bounce |
+
+### Opus 4.7 controls
+
+Opus 4.7 is a 3D take on Tetris where every tetromino cube is a mass-spring jelly that
+squishes, wobbles and bounces on impact. The simulation uses Verlet integration with
+PBD-style distance constraints; rendering is done with Three.js (loaded from a CDN).
+
+**Desktop**
+
+- `←` `→` or `A` `D` — move the falling piece
+- `↑`, `W`, or `X` — rotate clockwise
+- `Z` — rotate counter-clockwise
+- `↓` or `S` — soft drop (faster fall while held)
+- `Space` — hard drop (instant slam with a juicy squish)
+- `P` or `Esc` — pause / resume
+- `R` — restart
+
+**Mobile**
+
+- Use the on-screen pad to move and rotate
+- **Hard Drop** slams the piece down with a bounce
+- **Pause** and **Restart** are available in the toolbar
+
+Clearing one, two, three or four rows scores 100, 300, 500 or 800 points (multiplied
+by the current level). Every ten cleared lines bumps the level and the falling speed.
 
 ### Opus 4.8 controls
 
