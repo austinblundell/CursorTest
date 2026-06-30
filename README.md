@@ -25,6 +25,7 @@ Use the game buttons at the top of any page to switch games without going back t
 | GPT 5.5 | [gpt55.html](gpt55.html) | Stack soft-body tetrominoes in a glowing 3D Tetris well |
 | Composer 2.5 | [composer25.html](composer25.html) | 3D soft body physics Tetris with squishy jelly blocks |
 | Opus 4.8 | [opus48.html](opus48.html) | Soft body physics Tetris with wobbly 3D jelly pieces |
+| Sonnet 4.6 | [sonnet46.html](sonnet46.html) | 3D soft-body Tetris — spring-physics blocks squish, wobble and bounce |
 
 ### Opus 4.8 controls
 
@@ -143,3 +144,15 @@ The first click is always safe — mines are placed after your opening move.
 
 - On-screen buttons — move, rotate, drop, pause, and play
 - Drag on the canvas — orbit the camera
+
+### Sonnet 4.6 controls
+
+**Desktop**
+
+- ← → — move
+- ↑ or X — rotate clockwise
+- Z — rotate counter-clockwise
+- ↓ — soft drop
+- Space — hard drop
+- C — hold piece
+- P — pause / resume
