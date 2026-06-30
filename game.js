@@ -17,6 +17,10 @@ const timerEl = document.getElementById("timer");
 const resetButton = document.getElementById("reset-button");
 const difficultySelect = document.getElementById("difficulty");
 const messageEl = document.getElementById("message");
+const modeRevealBtn = document.getElementById("mode-reveal");
+const modeFlagBtn = document.getElementById("mode-flag");
+
+let touchMode = "reveal";
 
 let rows = 9;
 let cols = 9;
@@ -31,9 +35,21 @@ let timerInterval = null;
 let elapsedSeconds = 0;
 let mouseDownOnBoard = false;
 
+function setTouchMode(mode) {
+  touchMode = mode;
+  if (modeRevealBtn && modeFlagBtn) {
+    modeRevealBtn.classList.toggle("active", mode === "reveal");
+    modeFlagBtn.classList.toggle("active", mode === "flag");
+    modeRevealBtn.setAttribute("aria-pressed", mode === "reveal");
+    modeFlagBtn.setAttribute("aria-pressed", mode === "flag");
+  }
+}
+
 function init() {
   difficultySelect.addEventListener("change", newGame);
   resetButton.addEventListener("click", newGame);
+  if (modeRevealBtn) modeRevealBtn.addEventListener("click", () => setTouchMode("reveal"));
+  if (modeFlagBtn) modeFlagBtn.addEventListener("click", () => setTouchMode("flag"));
   boardEl.addEventListener("contextmenu", (e) => e.preventDefault());
   boardEl.addEventListener("mousedown", () => {
     if (!gameOver && !gameWon) {
@@ -110,6 +126,7 @@ function createCell(row, col) {
   let touchTimer = null;
   cell.addEventListener("touchstart", (e) => {
     e.preventDefault();
+    if (touchMode === "flag") return;
     touchTimer = setTimeout(() => {
       handleRightClick(row, col);
       touchTimer = null;
@@ -117,6 +134,10 @@ function createCell(row, col) {
   }, { passive: false });
   cell.addEventListener("touchend", (e) => {
     e.preventDefault();
+    if (touchMode === "flag") {
+      handleRightClick(row, col);
+      return;
+    }
     if (touchTimer) {
       clearTimeout(touchTimer);
       touchTimer = null;

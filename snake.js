@@ -5,6 +5,8 @@ const highScoreEl = document.getElementById('high-score');
 const overlay = document.getElementById('overlay');
 const overlayTitle = document.getElementById('overlay-title');
 const overlayMessage = document.getElementById('overlay-message');
+const pauseBtn = document.getElementById('pause-btn');
+const playBtn = document.getElementById('play-btn');
 
 const GRID = 20;
 const CELL = canvas.width / GRID;
@@ -19,6 +21,10 @@ const DIRECTIONS = {
   KeyS: { x: 0, y: 1 },
   KeyA: { x: -1, y: 0 },
   KeyD: { x: 1, y: 0 },
+  up: { x: 0, y: -1 },
+  down: { x: 0, y: 1 },
+  left: { x: -1, y: 0 },
+  right: { x: 1, y: 0 },
 };
 
 let snake;
@@ -30,6 +36,7 @@ let highScore = Number(localStorage.getItem('snake-high-score') || 0);
 let tickId;
 let paused = false;
 let gameOver = false;
+let started = false;
 
 highScoreEl.textContent = highScore;
 
@@ -46,6 +53,7 @@ function initGame() {
   scoreEl.textContent = score;
   paused = false;
   gameOver = false;
+  started = true;
   placeFood();
   hideOverlay();
   clearInterval(tickId);
@@ -131,15 +139,29 @@ function hideOverlay() {
 function endGame() {
   gameOver = true;
   clearInterval(tickId);
-  showOverlay('Game Over', `Score: ${score} · Press Space to play again`);
+  showOverlay('Game Over', `Score: ${score} · Press Space or tap Play to try again`);
 }
 
 function togglePause() {
-  if (gameOver) return;
+  if (gameOver || !started) return;
   paused = !paused;
   if (paused) {
-    showOverlay('Paused', 'Press Space to resume');
+    showOverlay('Paused', 'Press Space or tap Pause again to resume');
   } else {
+    hideOverlay();
+  }
+}
+
+function setDirection(next) {
+  if (!next || gameOver) return;
+
+  const isReverse = next.x === -direction.x && next.y === -direction.y;
+  if (!isReverse) {
+    nextDirection = next;
+  }
+
+  if (paused) {
+    paused = false;
     hideOverlay();
   }
 }
@@ -147,7 +169,7 @@ function togglePause() {
 document.addEventListener('keydown', (event) => {
   if (event.code === 'Space') {
     event.preventDefault();
-    if (gameOver) {
+    if (gameOver || !started) {
       initGame();
     } else {
       togglePause();
@@ -159,19 +181,47 @@ document.addEventListener('keydown', (event) => {
   if (!next) return;
 
   event.preventDefault();
-
-  if (gameOver) return;
-
-  const isReverse =
-    next.x === -direction.x && next.y === -direction.y;
-  if (!isReverse) {
-    nextDirection = next;
-  }
-
-  if (paused) {
-    paused = false;
-    hideOverlay();
-  }
+  if (!started) initGame();
+  setDirection(next);
 });
 
-initGame();
+document.querySelectorAll('[data-dir]').forEach((button) => {
+  button.addEventListener('click', () => {
+    if (!started) initGame();
+    setDirection(DIRECTIONS[button.dataset.dir]);
+  });
+});
+
+if (pauseBtn) pauseBtn.addEventListener('click', togglePause);
+if (playBtn) playBtn.addEventListener('click', initGame);
+
+let touchStart = null;
+canvas.addEventListener('touchstart', (event) => {
+  touchStart = event.changedTouches[0];
+}, { passive: true });
+
+canvas.addEventListener('touchend', (event) => {
+  if (!touchStart) return;
+  const touch = event.changedTouches[0];
+  const dx = touch.clientX - touchStart.clientX;
+  const dy = touch.clientY - touchStart.clientY;
+  touchStart = null;
+
+  if (Math.abs(dx) < 20 && Math.abs(dy) < 20) return;
+  if (!started) initGame();
+
+  if (Math.abs(dx) > Math.abs(dy)) {
+    setDirection(dx > 0 ? DIRECTIONS.right : DIRECTIONS.left);
+  } else {
+    setDirection(dy > 0 ? DIRECTIONS.down : DIRECTIONS.up);
+  }
+}, { passive: true });
+
+const isMobileLayout = window.matchMedia('(max-width: 768px)').matches;
+
+if (isMobileLayout) {
+  showOverlay('Snake', 'Tap Play or swipe to start');
+  draw();
+} else {
+  initGame();
+}
