@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Opus 4.8 — Soft Body Tetris</title>
+  <link rel="stylesheet" href="shared.css">
+  <link rel="stylesheet" href="opus48.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="game-nav" aria-label="Switch game">
+      <a href="snake.html">Snake</a>
+      <a href="minesweeper.html">Minesweeper</a>
+      <a href="auto.html">Auto</a>
+      <a href="gpt55.html">GPT 5.5</a>
+      <a href="composer25.html">Composer 2.5</a>
+      <a href="opus48.html" class="active" aria-current="page">Opus 4.8</a>
+    </nav>
+
+    <header>
+      <h1>Opus 4.8</h1>
+      <p class="tagline">Soft Body Physics Tetris</p>
+      <div class="stats">
+        <span class="stat">Score: <strong id="score">0</strong></span>
+        <span class="stat">Lines: <strong id="lines">0</strong></span>
+        <span class="stat">Level: <strong id="level">1</strong></span>
+        <span class="stat">Best: <strong id="high-score">0</strong></span>
+      </div>
+    </header>
+
+    <div class="game-wrapper">
+      <canvas id="game" aria-label="Soft body Tetris play field"></canvas>
+      <div id="overlay" class="overlay">
+        <p id="overlay-title">Opus 4.8</p>
+        <p id="overlay-message">Squishy 3D Tetris. Press <strong>Enter</strong> or tap Play to start.</p>
+        <button type="button" id="start-btn" class="primary-btn">Play</button>
+      </div>
+    </div>
+
+    <p class="controls desktop-hint">
+      ← → move · ↑ / Q E rotate · ↓ soft drop · Space hard drop · P pause · drag to orbit the view
+    </p>
+
+    <div class="mobile-toolbar visible" aria-label="Mobile controls">
+      <p class="mobile-hint">Use the buttons below to play</p>
+      <div class="dpad" aria-label="Direction controls">
+        <span class="empty"></span>
+        <button type="button" data-action="rotate" aria-label="Rotate">⟳</button>
+        <span class="empty"></span>
+        <button type="button" data-action="left" aria-label="Move left">◀</button>
+        <button type="button" data-action="down" aria-label="Soft drop">▼</button>
+        <button type="button" data-action="right" aria-label="Move right">▶</button>
+      </div>
+      <div class="mobile-actions">
+        <button type="button" data-action="drop">Drop</button>
+        <button type="button" data-action="pause">Pause</button>
+        <button type="button" data-action="restart">Restart</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="opus48.js"></script>
+</body>
+</html>
