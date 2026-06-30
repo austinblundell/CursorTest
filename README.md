@@ -12,7 +12,7 @@ python3 -m http.server 8080
 
 Then visit [http://localhost:8080](http://localhost:8080).
 
-Use the **Snake** / **Minesweeper** buttons at the top of any page to switch games without going back to the home screen.
+Use the **Snake** / **Minesweeper** / **Auto** buttons at the top of any page to switch games without going back to the home screen.
 
 ## Games
 
@@ -20,6 +20,25 @@ Use the **Snake** / **Minesweeper** buttons at the top of any page to switch gam
 |------|-------------|-------------|
 | Snake | [snake.html](snake.html) | Eat food, grow, and avoid walls and your tail |
 | Minesweeper | [minesweeper.html](minesweeper.html) | Reveal safe cells and flag all mines |
+| Auto | [auto.html](auto.html) | 3D soft-body physics tetris — squishy pieces, line clears, rising levels |
+
+### Auto controls
+
+**Desktop**
+
+- Arrow keys or WASD — move and soft drop
+- Up / W / X — rotate clockwise
+- Z — rotate counter-clockwise
+- Space — hard drop (while playing) or start / restart
+- P — pause / resume
+- Mouse drag — orbit the 3D camera
+
+**Mobile**
+
+- D-pad — move, rotate, and soft drop
+- **Drop** — hard drop the current piece
+- **Play** — start or restart
+- **Pause** — pause / resume
 
 ### Snake controls
 
