@@ -1,44 +1,197 @@
-# Three.js Rubik's Cube
+# Classic Games
 
-An interactive 3D Rubik's Cube built with [Three.js](https://threejs.org/). Orbit
-around a fully colored 3x3 cube, turn any face with smooth animations, scramble
-it, and reset it back to a solved state.
+Browser-based classic games built with HTML, CSS, and JavaScript.
 
-## Features
+## How to Play
 
-- Real 3x3 Rubik's Cube rendered with Three.js (`MeshStandardMaterial` + lighting)
-- Smooth, queued quarter-turn animations with ease-in/out
-- All six faces, clockwise and counter-clockwise (prime) turns
-- One-click **Scramble** (25 random moves) and **Reset**
-- Orbit / zoom camera controls (drag to rotate, scroll to zoom)
-- Keyboard shortcuts: `U D L R F B` to turn faces, hold **Shift** for prime turns
-
-## Running
-
-No build step or dependencies to install — everything is loaded from a CDN via an
-import map. Because ES modules require an HTTP origin, serve the folder with any
-static server:
+Open `index.html` in a browser, or serve the folder locally:
 
 ```bash
-# Python
-python3 -m http.server 8000
-
-# or Node
-npx serve .
+python3 -m http.server 8080
 ```
 
-Then open <http://localhost:8000> in your browser.
+Then visit [http://localhost:8080](http://localhost:8080).
 
-## How it works
+Use the game buttons at the top of any page to switch games without going back to the home screen.
 
-Each of the 27 cubies is a `BoxGeometry` mesh whose six faces are colored only
-where they sit on the outer surface of the cube. To turn a face, the cubies in
-that slice are temporarily re-parented to a `pivot` group, the pivot is rotated
-90°, and then the cubies are baked back into the main group with their positions
-snapped to the grid. This keeps the cube state stable across any number of moves.
+## Games
 
-## Files
+| Game | Entry point | Description |
+|------|-------------|-------------|
+| Snake | [snake.html](snake.html) | Eat food, grow, and avoid walls and your tail |
+| Minesweeper | [minesweeper.html](minesweeper.html) | Reveal safe cells and flag all mines |
+| Codex | [codex.html](codex.html) | Stack springy 3D tetrominoes and clear full horizontal layers |
+| Auto | [auto.html](auto.html) | 3D soft-body physics tetris — squishy pieces, line clears, rising levels |
+| GPT 5.5 | [gpt55.html](gpt55.html) | Stack soft-body tetrominoes in a glowing 3D Tetris well |
+| Composer 2.5 | [composer25.html](composer25.html) | 3D soft body physics Tetris with squishy jelly blocks |
+| Opus 4.7 | [opus47.html](opus47.html) | 3D Tetris where every piece is a wobbling soft-body jelly |
+| Opus 4.8 | [opus48.html](opus48.html) | Soft body physics Tetris with wobbly 3D jelly pieces |
+| Sonnet 4.6 | [sonnet46.html](sonnet46.html) | 3D soft-body Tetris — spring-physics blocks squish, wobble and bounce |
+| Hacker | [hacker.html](hacker.html) | Movie-style 3D "hacking" visual — Matrix rain, a neon cyber-globe with attack arcs, and a live intrusion terminal |
 
-- `index.html` — markup, control buttons, and the Three.js import map
-- `style.css` — UI styling and layout
-- `main.js` — scene setup, cube construction, and the move engine
+### Opus 4.7 controls
+
+Opus 4.7 is a 3D take on Tetris where every tetromino cube is a mass-spring jelly that
+squishes, wobbles and bounces on impact. The simulation uses Verlet integration with
+PBD-style distance constraints; rendering is done with Three.js (loaded from a CDN).
+
+**Desktop**
+
+- `←` `→` or `A` `D` — move the falling piece
+- `↑`, `W`, or `X` — rotate clockwise
+- `Z` — rotate counter-clockwise
+- `↓` or `S` — soft drop (faster fall while held)
+- `Space` — hard drop (instant slam with a juicy squish)
+- `P` or `Esc` — pause / resume
+- `R` — restart
+
+**Mobile**
+
+- Use the on-screen pad to move and rotate
+- **Hard Drop** slams the piece down with a bounce
+- **Pause** and **Restart** are available in the toolbar
+
+Clearing one, two, three or four rows scores 100, 300, 500 or 800 points (multiplied
+by the current level). Every ten cleared lines bumps the level and the falling speed.
+
+### Opus 4.8 controls
+
+Classic Tetris rules drive a logical grid while the falling piece is rendered as
+a wobbly mass-spring jelly that sags, bounces and squashes on impact.
+
+**Desktop**
+
+- ← / → or A / D — move left / right
+- ↑ / W / E — rotate clockwise · Q / Z — rotate counter-clockwise
+- ↓ / S — soft drop (hold)
+- Space — hard drop
+- P — pause / resume · Enter — start / restart
+- Mouse drag — orbit the 3D camera
+
+**Mobile**
+
+- On-screen buttons — move, rotate, soft drop, hard drop, pause, restart
+- Drag on the canvas — orbit the camera
+
+### Snake controls
+
+**Desktop**
+
+- Arrow keys or WASD — move
+- Space — pause / resume
+- Space (after game over) — play again
+
+**Mobile**
+
+- Swipe on the board or use the on-screen D-pad to move
+- **Play** — start or restart
+- **Pause** — pause / resume
+
+### Minesweeper controls
+
+**Desktop**
+
+- Left-click — reveal a cell
+- Right-click — place or remove a flag
+- Double-click a revealed number — chord (reveal neighbors when enough flags are placed)
+
+**Mobile**
+
+- Tap — reveal a cell (Reveal mode) or place a flag (Flag mode)
+- Long-press — flag a cell while in Reveal mode
+- Use the **Reveal** / **Flag** mode buttons below the board to switch tap behavior
+
+#### Difficulty levels
+
+| Level        | Grid   | Mines |
+|--------------|--------|-------|
+| Beginner     | 9×9    | 10    |
+| Intermediate | 16×16  | 40    |
+| Expert       | 30×16  | 99    |
+
+The first click is always safe — mines are placed after your opening move.
+
+### Codex controls
+
+- A / D — move active piece on X axis
+- W / S — move active piece on Z axis
+- Q / E — rotate active piece
+- Down Arrow — soft drop
+- Space — hard drop
+- P — pause / resume
+- Enter — restart game
+
+### Auto controls
+
+**Desktop**
+
+- Arrow keys or WASD — move and soft drop
+- Up / W / X — rotate clockwise
+- Z — rotate counter-clockwise
+- Space — hard drop (while playing) or start / restart
+- P — pause / resume
+- Mouse drag — orbit the 3D camera
+
+**Mobile**
+
+- D-pad — move, rotate, and soft drop
+- **Drop** — hard drop the current piece
+- **Play** — start or restart
+- **Pause** — pause / resume
+
+### GPT 5.5 controls
+
+**Desktop**
+
+- Arrow keys or A/D — move
+- Up, W, or X — rotate clockwise
+- Z — rotate counter-clockwise
+- Down or S — soft drop
+- Space — hard drop
+- P or Escape — pause / resume
+- Enter — start / restart
+
+**Mobile**
+
+- Tap the well — rotate
+- Swipe left/right — move
+- Swipe down — hard drop
+- Use the on-screen buttons for movement, spin, drop, slam, pause, and restart
+
+### Composer 2.5 controls
+
+**Desktop**
+
+- Arrow keys or WASD — move and rotate pieces
+- Enter — hard drop
+- Space — start / pause / restart after game over
+- Mouse drag — orbit the 3D camera
+
+**Mobile**
+
+- On-screen buttons — move, rotate, drop, pause, and play
+- Drag on the canvas — orbit the camera
+
+### Sonnet 4.6 controls
+
+**Desktop**
+
+- ← → — move
+- ↑ or X — rotate clockwise
+- Z — rotate counter-clockwise
+- ↓ — soft drop
+- Space — hard drop
+- C — hold piece
+- P — pause / resume
+
+### Hacker
+
+A purely visual, movie-style "hacking" animation built with Three.js (loaded from a
+CDN) — no input required, it just runs. The scene layers a 3D Matrix glyph rain, a
+glowing wireframe cyber-globe streaked with travelling attack arcs, a neon grid floor
+and a starfield, all wrapped in CRT scanlines, a vignette and occasional flicker. A
+live terminal types out a fake intrusion (port scans, brute force, exploit, decrypt,
+exfiltrate) and flashes a glitchy **ACCESS GRANTED** banner before looping.
+
+Just open [hacker.html](hacker.html) and watch — the camera drifts on its own and the
+sequence repeats endlessly.

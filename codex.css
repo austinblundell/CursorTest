@@ -1,0 +1,140 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  background: radial-gradient(circle at 15% 10%, #25385c 0%, #121826 45%, #0a0f1b 100%);
+  color: #d9e6ff;
+}
+
+.codex-app {
+  width: min(980px, 100%);
+  margin: 0 auto;
+  padding: 1.2rem 1.2rem 2rem;
+}
+
+.codex-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.codex-header h1 {
+  margin: 0;
+  font-size: 2.2rem;
+  letter-spacing: 0.08em;
+  color: #84b8ff;
+  text-shadow: 0 0 24px rgba(132, 184, 255, 0.35);
+}
+
+.codex-header p {
+  margin: 0.25rem 0 0;
+  color: #93abd7;
+}
+
+.hud {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+}
+
+.stat-box {
+  border: 1px solid #2b3d60;
+  background: rgba(21, 32, 54, 0.86);
+  border-radius: 12px;
+  text-align: center;
+  padding: 0.65rem 0.5rem;
+}
+
+.stat-box .label {
+  display: block;
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #88a0ca;
+}
+
+.stat-box strong {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 1.2rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.stage-wrap {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #34507d;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.42);
+}
+
+.stage {
+  width: 100%;
+  height: min(68vh, 680px);
+  min-height: 420px;
+  background: linear-gradient(180deg, #101c34 0%, #0a1324 100%);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(5, 11, 22, 0.74);
+  backdrop-filter: blur(2px);
+  text-align: center;
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.overlay h2 {
+  margin: 0;
+  font-size: 2rem;
+  color: #a7c7ff;
+}
+
+.overlay p {
+  margin: 0.4rem 0 0;
+  color: #b6caee;
+}
+
+.help {
+  margin-top: 0.85rem;
+  border: 1px solid #2f456f;
+  background: rgba(15, 25, 45, 0.75);
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  font-size: 0.9rem;
+  color: #aac0e4;
+}
+
+.help p {
+  margin: 0.3rem 0;
+}
+
+@media (max-width: 740px) {
+  .codex-app {
+    padding-inline: 0.65rem;
+  }
+
+  .hud {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stage {
+    min-height: 360px;
+    height: min(56vh, 560px);
+  }
+
+  .help {
+    font-size: 0.82rem;
+  }
+}
