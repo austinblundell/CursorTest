@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Composer 2.5 — Soft Body Tetris</title>
+  <link rel="stylesheet" href="shared.css">
+  <link rel="stylesheet" href="composer25.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <nav class="game-nav" aria-label="Switch game">
+      <a href="snake.html">Snake</a>
+      <a href="minesweeper.html">Minesweeper</a>
+      <a href="auto.html">Auto</a>
+      <a href="gpt55.html">GPT 5.5</a>
+      <a href="composer25.html" class="active" aria-current="page">Composer 2.5</a>
+    </nav>
+
+    <header>
+      <h1>Composer 2.5</h1>
+      <p class="subtitle">Soft Body Physics Tetris</p>
+      <div class="stats-row">
+        <span>Score: <strong id="score">0</strong></span>
+        <span>Lines: <strong id="lines">0</strong></span>
+        <span>Level: <strong id="level">1</strong></span>
+        <span>High: <strong id="high-score">0</strong></span>
+      </div>
+    </header>
+
+    <div class="game-layout">
+      <div class="game-wrapper">
+        <canvas id="game-canvas" aria-label="Composer 2.5 3D game board"></canvas>
+        <div id="overlay" class="overlay">
+          <p id="overlay-title">Composer 2.5</p>
+          <p id="overlay-message">Soft body jelly blocks — press Space to start</p>
+        </div>
+      </div>
+
+      <aside class="side-panel">
+        <div class="panel-box">
+          <h2>Next</h2>
+          <canvas id="next-preview" width="140" height="100" aria-label="Next piece preview"></canvas>
+        </div>
+        <div class="panel-box desktop-hint">
+          <h2>Controls</h2>
+          <p style="font-size:0.82rem;color:#94a3b8;line-height:1.55">
+            ← → move<br>
+            ↑ / W rotate<br>
+            ↓ soft drop<br>
+            Enter hard drop<br>
+            Space pause<br>
+            Drag to orbit camera
+          </p>
+        </div>
+      </aside>
+    </div>
+
+    <p class="controls desktop-hint">Jelly tetrominoes squish and wobble with mass-spring physics · Clear rows to score</p>
+
+    <div class="mobile-toolbar visible" aria-label="Mobile controls">
+      <div class="mobile-actions">
+        <button type="button" data-action="left" aria-label="Move left">◀</button>
+        <button type="button" data-action="rotate" aria-label="Rotate">↻</button>
+        <button type="button" data-action="right" aria-label="Move right">▶</button>
+        <button type="button" data-action="down" aria-label="Soft drop">▼</button>
+        <button type="button" data-action="drop" aria-label="Hard drop">Drop</button>
+        <button type="button" data-action="pause" aria-label="Pause">Pause</button>
+        <button type="button" data-action="start" aria-label="Start">Play</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="composer25.js"></script>
+</body>
+</html>
