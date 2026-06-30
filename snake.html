@@ -2,12 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Snake</title>
+  <link rel="stylesheet" href="shared.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
+    <nav class="game-nav" aria-label="Switch game">
+      <a href="snake.html" class="active" aria-current="page">Snake</a>
+      <a href="minesweeper.html">Minesweeper</a>
+    </nav>
+
     <header>
       <h1>Snake</h1>
       <div class="stats">
@@ -24,7 +30,23 @@
       </div>
     </div>
 
-    <p class="controls">Use arrow keys or WASD to move · Space to pause / restart</p>
+    <p class="controls desktop-hint">Use arrow keys or WASD to move · Space to pause / restart</p>
+
+    <div class="mobile-toolbar visible" aria-label="Mobile controls">
+      <p class="mobile-hint">Swipe on the board or use the buttons below</p>
+      <div class="dpad" aria-label="Direction controls">
+        <span class="empty"></span>
+        <button type="button" data-dir="up" aria-label="Up">▲</button>
+        <span class="empty"></span>
+        <button type="button" data-dir="left" aria-label="Left">◀</button>
+        <button type="button" data-dir="down" aria-label="Down">▼</button>
+        <button type="button" data-dir="right" aria-label="Right">▶</button>
+      </div>
+      <div class="mobile-actions">
+        <button type="button" id="pause-btn">Pause</button>
+        <button type="button" id="play-btn">Play</button>
+      </div>
+    </div>
   </div>
 
   <script src="snake.js"></script>

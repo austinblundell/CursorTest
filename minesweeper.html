@@ -2,15 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Minesweeper</title>
+  <link rel="stylesheet" href="shared.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="app">
+    <nav class="game-nav" aria-label="Switch game">
+      <a href="snake.html">Snake</a>
+      <a href="minesweeper.html" class="active" aria-current="page">Minesweeper</a>
+    </nav>
+
     <header class="header">
       <h1>Minesweeper</h1>
-      <p class="subtitle">Left-click to reveal · Right-click to flag · Double-click numbers to chord</p>
+      <p class="subtitle desktop-hint">Left-click to reveal · Right-click to flag · Double-click numbers to chord</p>
     </header>
 
     <main class="game-panel">
@@ -33,6 +39,14 @@
 
       <div class="board-wrapper">
         <div class="board" id="board" role="grid" aria-label="Minesweeper board"></div>
+      </div>
+
+      <div class="mobile-toolbar visible" aria-label="Mobile controls">
+        <p class="mobile-hint">Tap a cell to reveal · Long-press to flag · Or pick a mode below</p>
+        <div class="mobile-actions">
+          <button type="button" id="mode-reveal" class="active" aria-pressed="true">Reveal</button>
+          <button type="button" id="mode-flag" aria-pressed="false">Flag</button>
+        </div>
       </div>
 
       <p class="message" id="message" aria-live="polite"></p>

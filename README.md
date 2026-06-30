@@ -12,6 +12,8 @@ python3 -m http.server 8080
 
 Then visit [http://localhost:8080](http://localhost:8080).
 
+Use the **Snake** / **Minesweeper** buttons at the top of any page to switch games without going back to the home screen.
+
 ## Games
 
 | Game | Entry point | Description |
@@ -21,18 +23,31 @@ Then visit [http://localhost:8080](http://localhost:8080).
 
 ### Snake controls
 
+**Desktop**
+
 - Arrow keys or WASD — move
 - Space — pause / resume
 - Space (after game over) — play again
 
-For mobile, use the self-contained [play.html](play.html) with touch/swipe controls.
+**Mobile**
+
+- Swipe on the board or use the on-screen D-pad to move
+- **Play** — start or restart
+- **Pause** — pause / resume
 
 ### Minesweeper controls
+
+**Desktop**
 
 - Left-click — reveal a cell
 - Right-click — place or remove a flag
 - Double-click a revealed number — chord (reveal neighbors when enough flags are placed)
-- Long-press (touch) — flag a cell
+
+**Mobile**
+
+- Tap — reveal a cell (Reveal mode) or place a flag (Flag mode)
+- Long-press — flag a cell while in Reveal mode
+- Use the **Reveal** / **Flag** mode buttons below the board to switch tap behavior
 
 #### Difficulty levels
 
