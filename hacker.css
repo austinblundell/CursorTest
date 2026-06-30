@@ -1,0 +1,277 @@
+:root {
+  --hx-green: #39ff14;
+  --hx-green-dim: #1f8a2f;
+  --hx-cyan: #18e0ff;
+  --hx-amber: #ffb000;
+  --hx-red: #ff3b3b;
+  --hx-bg: #02060a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--hx-bg);
+  color: var(--hx-green);
+  font-family: "Share Tech Mono", "Courier New", monospace;
+  overflow: hidden;
+}
+
+/* The repo's shared nav sits on top of everything */
+.game-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  margin: 0;
+  padding: 0.5rem;
+  background: rgba(2, 6, 10, 0.72);
+  border-bottom: 1px solid rgba(57, 255, 20, 0.25);
+  backdrop-filter: blur(4px);
+  flex-wrap: wrap;
+}
+
+.game-nav a {
+  background: rgba(8, 20, 12, 0.8);
+  border-color: rgba(57, 255, 20, 0.35);
+  color: rgba(57, 255, 20, 0.65);
+  font-family: inherit;
+}
+
+.game-nav a:hover {
+  border-color: var(--hx-green);
+  color: var(--hx-green);
+  box-shadow: 0 0 12px rgba(57, 255, 20, 0.4);
+}
+
+.game-nav a.active {
+  border-color: var(--hx-green);
+  background: rgba(57, 255, 20, 0.12);
+  color: var(--hx-green);
+}
+
+#scene {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 1;
+}
+
+/* ---------- HUD overlay ---------- */
+.hud {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  text-shadow: 0 0 6px rgba(57, 255, 20, 0.65);
+}
+
+.hud-top {
+  position: absolute;
+  top: 3.4rem;
+  left: 1.2rem;
+  right: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  flex-wrap: wrap;
+}
+
+.hud-top .tag {
+  color: var(--hx-cyan);
+  text-shadow: 0 0 8px rgba(24, 224, 255, 0.6);
+}
+
+.hud-stats {
+  display: flex;
+  gap: 1.4rem;
+  flex-wrap: wrap;
+}
+
+.hud-stats b {
+  color: #d6ffd0;
+  font-weight: 400;
+}
+
+/* status corners */
+.corner {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border: 2px solid rgba(57, 255, 20, 0.5);
+}
+.corner.tl { top: 3rem; left: 0.6rem; border-right: 0; border-bottom: 0; }
+.corner.tr { top: 3rem; right: 0.6rem; border-left: 0; border-bottom: 0; }
+.corner.bl { bottom: 0.6rem; left: 0.6rem; border-right: 0; border-top: 0; }
+.corner.br { bottom: 0.6rem; right: 0.6rem; border-left: 0; border-top: 0; }
+
+/* ---------- Terminal ---------- */
+.terminal {
+  position: absolute;
+  bottom: 1.4rem;
+  left: 1.4rem;
+  width: min(520px, 46vw);
+  max-height: 56vh;
+  background: rgba(1, 10, 4, 0.62);
+  border: 1px solid rgba(57, 255, 20, 0.4);
+  border-radius: 6px;
+  box-shadow: 0 0 30px rgba(57, 255, 20, 0.18), inset 0 0 40px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.7rem;
+  background: rgba(57, 255, 20, 0.08);
+  border-bottom: 1px solid rgba(57, 255, 20, 0.25);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--hx-red);
+  box-shadow: 0 0 8px var(--hx-red);
+}
+.dot.y { background: var(--hx-amber); box-shadow: 0 0 8px var(--hx-amber); }
+.dot.g { background: var(--hx-green); box-shadow: 0 0 8px var(--hx-green); }
+.terminal-bar .title { margin-left: auto; color: rgba(57, 255, 20, 0.7); }
+
+.terminal-body {
+  padding: 0.7rem 0.9rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  overflow: hidden;
+  flex: 1;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.terminal-body .line { display: block; }
+.terminal-body .ok { color: var(--hx-green); }
+.terminal-body .warn { color: var(--hx-amber); }
+.terminal-body .err { color: var(--hx-red); }
+.terminal-body .info { color: var(--hx-cyan); }
+.terminal-body .dim { color: rgba(57, 255, 20, 0.45); }
+.terminal-body .prompt { color: var(--hx-cyan); }
+
+.cursor {
+  display: inline-block;
+  width: 0.6ch;
+  background: var(--hx-green);
+  box-shadow: 0 0 8px var(--hx-green);
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ---------- ACCESS GRANTED banner ---------- */
+.banner {
+  position: absolute;
+  top: 42%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: clamp(1.8rem, 7vw, 5.5rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  opacity: 0;
+  transition: opacity 0.18s;
+  z-index: 20;
+}
+
+.banner.show { opacity: 1; }
+
+.banner .txt {
+  position: relative;
+  display: inline-block;
+  color: var(--hx-green);
+  text-shadow: 0 0 18px rgba(57, 255, 20, 0.8), 0 0 40px rgba(57, 255, 20, 0.5);
+}
+
+.banner.denied .txt { color: var(--hx-red); text-shadow: 0 0 18px rgba(255, 59, 59, 0.8); }
+
+.banner.glitch .txt::before,
+.banner.glitch .txt::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  overflow: hidden;
+}
+.banner.glitch .txt::before {
+  color: var(--hx-cyan);
+  transform: translate(-3px, -2px);
+  clip-path: inset(0 0 55% 0);
+  opacity: 0.8;
+}
+.banner.glitch .txt::after {
+  color: var(--hx-red);
+  transform: translate(3px, 2px);
+  clip-path: inset(55% 0 0 0);
+  opacity: 0.8;
+}
+
+/* ---------- CRT effects ---------- */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.22) 3px,
+    rgba(0, 0, 0, 0.22) 4px
+  );
+  mix-blend-mode: multiply;
+}
+
+.vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 31;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.75) 100%);
+}
+
+.flicker {
+  position: fixed;
+  inset: 0;
+  z-index: 32;
+  pointer-events: none;
+  background: rgba(57, 255, 20, 0.03);
+  animation: flick 7s infinite;
+}
+@keyframes flick {
+  0%, 96%, 100% { opacity: 0; }
+  97% { opacity: 0.6; }
+  98% { opacity: 0.1; }
+  99% { opacity: 0.4; }
+}
+
+@media (max-width: 768px) {
+  .terminal { width: calc(100vw - 2rem); max-height: 42vh; }
+  .hud-top { font-size: 0.66rem; }
+  .hud-stats { gap: 0.8rem; }
+}

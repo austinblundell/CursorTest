@@ -27,6 +27,7 @@ Use the game buttons at the top of any page to switch games without going back t
 | Opus 4.7 | [opus47.html](opus47.html) | 3D Tetris where every piece is a wobbling soft-body jelly |
 | Opus 4.8 | [opus48.html](opus48.html) | Soft body physics Tetris with wobbly 3D jelly pieces |
 | Sonnet 4.6 | [sonnet46.html](sonnet46.html) | 3D soft-body Tetris — spring-physics blocks squish, wobble and bounce |
+| Hacker | [hacker.html](hacker.html) | Movie-style 3D "hacking" visual — Matrix rain, a neon cyber-globe with attack arcs, and a live intrusion terminal |
 
 ### Opus 4.7 controls
 
@@ -182,3 +183,15 @@ The first click is always safe — mines are placed after your opening move.
 - Space — hard drop
 - C — hold piece
 - P — pause / resume
+
+### Hacker
+
+A purely visual, movie-style "hacking" animation built with Three.js (loaded from a
+CDN) — no input required, it just runs. The scene layers a 3D Matrix glyph rain, a
+glowing wireframe cyber-globe streaked with travelling attack arcs, a neon grid floor
+and a starfield, all wrapped in CRT scanlines, a vignette and occasional flicker. A
+live terminal types out a fake intrusion (port scans, brute force, exploit, decrypt,
+exfiltrate) and flashes a glitchy **ACCESS GRANTED** banner before looping.
+
+Just open [hacker.html](hacker.html) and watch — the camera drifts on its own and the
+sequence repeats endlessly.
