@@ -12,7 +12,7 @@ python3 -m http.server 8080
 
 Then visit [http://localhost:8080](http://localhost:8080).
 
-Use the **Snake** / **Minesweeper** / **GPT 5.5** / **Composer 2.5** buttons at the top of any page to switch games without going back to the home screen.
+Use the game buttons at the top of any page to switch games without going back to the home screen.
 
 ## Games
 
@@ -20,6 +20,7 @@ Use the **Snake** / **Minesweeper** / **GPT 5.5** / **Composer 2.5** buttons at 
 |------|-------------|-------------|
 | Snake | [snake.html](snake.html) | Eat food, grow, and avoid walls and your tail |
 | Minesweeper | [minesweeper.html](minesweeper.html) | Reveal safe cells and flag all mines |
+| Auto | [auto.html](auto.html) | 3D soft-body physics tetris — squishy pieces, line clears, rising levels |
 | GPT 5.5 | [gpt55.html](gpt55.html) | Stack soft-body tetrominoes in a glowing 3D Tetris well |
 | Composer 2.5 | [composer25.html](composer25.html) | 3D soft body physics Tetris with squishy jelly blocks |
 
@@ -60,6 +61,24 @@ Use the **Snake** / **Minesweeper** / **GPT 5.5** / **Composer 2.5** buttons at 
 | Expert       | 30×16  | 99    |
 
 The first click is always safe — mines are placed after your opening move.
+
+### Auto controls
+
+**Desktop**
+
+- Arrow keys or WASD — move and soft drop
+- Up / W / X — rotate clockwise
+- Z — rotate counter-clockwise
+- Space — hard drop (while playing) or start / restart
+- P — pause / resume
+- Mouse drag — orbit the 3D camera
+
+**Mobile**
+
+- D-pad — move, rotate, and soft drop
+- **Drop** — hard drop the current piece
+- **Play** — start or restart
+- **Pause** — pause / resume
 
 ### GPT 5.5 controls
 
