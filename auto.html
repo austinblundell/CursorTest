@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Auto — Soft Body Tetris</title>
+  <link rel="stylesheet" href="shared.css">
+  <link rel="stylesheet" href="auto.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="game-nav" aria-label="Switch game">
+      <a href="snake.html">Snake</a>
+      <a href="minesweeper.html">Minesweeper</a>
+      <a href="auto.html" class="active" aria-current="page">Auto</a>
+      <a href="gpt55.html">GPT 5.5</a>
+      <a href="composer25.html">Composer 2.5</a>
+    </nav>
+
+    <header>
+      <h1>Auto</h1>
+      <p class="tagline">Soft body physics tetris</p>
+      <div class="stats">
+        <span class="stat">Score: <strong id="score">0</strong></span>
+        <span class="stat">Lines: <strong id="lines">0</strong></span>
+        <span class="stat">Level: <strong id="level">1</strong></span>
+        <span class="stat">High: <strong id="high-score">0</strong></span>
+      </div>
+    </header>
+
+    <div class="game-layout">
+      <aside class="side-panel" aria-label="Next piece">
+        <h2>Next</h2>
+        <canvas id="next-canvas" width="120" height="120" aria-hidden="true"></canvas>
+      </aside>
+
+      <div class="game-wrapper">
+        <canvas id="game" aria-label="Auto soft body tetris board"></canvas>
+        <div id="overlay" class="overlay hidden">
+          <p id="overlay-title">Auto</p>
+          <p id="overlay-message">Press Space or tap Play to start</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="controls desktop-hint">
+      ← → move · ↑ / X rotate · Z rotate other way · ↓ soft drop · Space hard drop / pause
+    </p>
+
+    <div class="mobile-toolbar visible" aria-label="Mobile controls">
+      <p class="mobile-hint">Use the buttons below to play</p>
+      <div class="dpad" aria-label="Movement controls">
+        <span class="empty"></span>
+        <button type="button" data-action="rotate" aria-label="Rotate">↻</button>
+        <span class="empty"></span>
+        <button type="button" data-action="left" aria-label="Left">◀</button>
+        <button type="button" data-action="down" aria-label="Soft drop">▼</button>
+        <button type="button" data-action="right" aria-label="Right">▶</button>
+      </div>
+      <div class="mobile-actions">
+        <button type="button" id="drop-btn">Drop</button>
+        <button type="button" id="pause-btn">Pause</button>
+        <button type="button" id="play-btn">Play</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module" src="auto.js"></script>
+</body>
+</html>
