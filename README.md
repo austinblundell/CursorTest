@@ -20,6 +20,7 @@ Use the game buttons at the top of any page to switch games without going back t
 |------|-------------|-------------|
 | Snake | [snake.html](snake.html) | Eat food, grow, and avoid walls and your tail |
 | Minesweeper | [minesweeper.html](minesweeper.html) | Reveal safe cells and flag all mines |
+| Codex | [codex.html](codex.html) | Stack springy 3D tetrominoes and clear full horizontal layers |
 | Auto | [auto.html](auto.html) | 3D soft-body physics tetris — squishy pieces, line clears, rising levels |
 | GPT 5.5 | [gpt55.html](gpt55.html) | Stack soft-body tetrominoes in a glowing 3D Tetris well |
 | Composer 2.5 | [composer25.html](composer25.html) | 3D soft body physics Tetris with squishy jelly blocks |
@@ -81,6 +82,16 @@ a wobbly mass-spring jelly that sags, bounces and squashes on impact.
 | Expert       | 30×16  | 99    |
 
 The first click is always safe — mines are placed after your opening move.
+
+### Codex controls
+
+- A / D — move active piece on X axis
+- W / S — move active piece on Z axis
+- Q / E — rotate active piece
+- Down Arrow — soft drop
+- Space — hard drop
+- P — pause / resume
+- Enter — restart game
 
 ### Auto controls
 
