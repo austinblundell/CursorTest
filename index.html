@@ -1,132 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Classic Games</title>
-  <link rel="stylesheet" href="shared.css">
-  <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(ellipse at top, #2d3748 0%, #1a1f2e 60%);
-      color: #e2e8f0;
-      padding: 1.5rem;
-    }
-
-    main {
-      width: 100%;
-      max-width: 420px;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.35rem;
-    }
-
-    p {
-      color: #94a3b8;
-      margin-bottom: 2rem;
-    }
-
-    .games {
-      display: grid;
-      gap: 1rem;
-    }
-
-    .game-link {
-      display: block;
-      padding: 1.25rem 1.5rem;
-      border-radius: 12px;
-      border: 1px solid #3a4256;
-      background: #252b3b;
-      color: inherit;
-      text-decoration: none;
-      transition: transform 0.15s, border-color 0.15s;
-    }
-
-    .game-link:hover {
-      transform: translateY(-2px);
-      border-color: #48bb78;
-    }
-
-    .game-link strong {
-      display: block;
-      font-size: 1.25rem;
-      margin-bottom: 0.35rem;
-    }
-
-    .game-link span {
-      color: #94a3b8;
-      font-size: 0.9rem;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Three.js Rubik's Cube</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main>
-    <nav class="game-nav" aria-label="Switch game">
-      <a href="snake.html">Snake</a>
-      <a href="minesweeper.html">Minesweeper</a>
-      <a href="codex.html">Codex</a>
-      <a href="auto.html">Auto</a>
-      <a href="gpt55.html">GPT 5.5</a>
-      <a href="composer25.html">Composer 2.5</a>
-      <a href="opus47.html">Opus 4.7</a>
-      <a href="opus48.html">Opus 4.8</a>
-      <a href="sonnet46.html">Sonnet 4.6</a>
-    </nav>
-    <h1>Classic Games</h1>
-    <p>Pick a game to play</p>
-    <nav class="games" aria-label="Game selection">
-      <a class="game-link" href="snake.html">
-        <strong>Snake</strong>
-        <span>Eat food, grow longer, avoid your tail</span>
-      </a>
-      <a class="game-link" href="minesweeper.html">
-        <strong>Minesweeper</strong>
-        <span>Clear the board without hitting a mine</span>
-      </a>
-      <a class="game-link" href="codex.html">
-        <strong>Codex</strong>
-        <span>Drop springy 3D tetromino layers in soft-body style</span>
-      </a>
-      <a class="game-link" href="auto.html">
-        <strong>Auto</strong>
-        <span>3D soft-body physics tetris — squish, stack, clear lines</span>
-      </a>
-      <a class="game-link" href="gpt55.html">
-        <strong>GPT 5.5</strong>
-        <span>Soft-body tetrominoes wobble through a 3D Tetris well</span>
-      </a>
-      <a class="game-link" href="composer25.html">
-        <strong>Composer 2.5</strong>
-        <span>3D soft body physics Tetris with squishy jelly blocks</span>
-      </a>
-      <a class="game-link" href="opus47.html">
-        <strong>Opus 4.7</strong>
-        <span>3D Tetris with squishy soft-body physics</span>
-      </a>
-      <a class="game-link" href="opus48.html">
-        <strong>Opus 4.8</strong>
-        <span>Soft body physics Tetris with wobbly 3D jelly pieces</span>
-      </a>
-      <a class="game-link" href="sonnet46.html">
-        <strong>Sonnet 4.6</strong>
-        <span>3D soft-body Tetris — spring-physics blocks squish, wobble &amp; bounce</span>
-      </a>
-    </nav>
-  </main>
+  <div id="app">
+    <header id="hud">
+      <h1>Rubik's Cube</h1>
+      <p class="hint">Drag to orbit &middot; scroll to zoom &middot; use the buttons to turn faces</p>
+    </header>
+
+    <div id="controls">
+      <div class="group">
+        <span class="group-label">Faces (CW)</span>
+        <div class="buttons">
+          <button data-move="U">U</button>
+          <button data-move="D">D</button>
+          <button data-move="L">L</button>
+          <button data-move="R">R</button>
+          <button data-move="F">F</button>
+          <button data-move="B">B</button>
+        </div>
+      </div>
+      <div class="group">
+        <span class="group-label">Prime (CCW)</span>
+        <div class="buttons">
+          <button data-move="U'">U'</button>
+          <button data-move="D'">D'</button>
+          <button data-move="L'">L'</button>
+          <button data-move="R'">R'</button>
+          <button data-move="F'">F'</button>
+          <button data-move="B'">B'</button>
+        </div>
+      </div>
+      <div class="group">
+        <span class="group-label">Actions</span>
+        <div class="buttons">
+          <button id="scramble" class="accent">Scramble</button>
+          <button id="reset">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <canvas id="scene"></canvas>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="main.js"></script>
 </body>
 </html>
